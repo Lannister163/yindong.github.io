@@ -1,0 +1,840 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/yindong.github.io/img/favicon.png">
+  <link rel="icon" href="/yindong.github.io/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="3 文件管理3.1 文件系统与目录结构 文件和目录被组织成一个单根倒置树结构 文件系统从根目录下开始，用”&#x2F;“表示 根文件系统(rootfs)：root filesystem 标准Linux文件系统(ext4)，文件名称大小写敏感，例如：MALL,Mail,mail,mAiL 以.开头的文件为隐藏文件 路径分隔的&#x2F; 文件名最长255个字节 包括路径在内文件名最长4095个字节 蓝色–&gt;目录">
+<meta property="og:type" content="article">
+<meta property="og:title" content="文件管理">
+<meta property="og:url" content="https://lannister163.github.io/yindong.github.io/2022/07/23/%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="阴东">
+<meta property="og:description" content="3 文件管理3.1 文件系统与目录结构 文件和目录被组织成一个单根倒置树结构 文件系统从根目录下开始，用”&#x2F;“表示 根文件系统(rootfs)：root filesystem 标准Linux文件系统(ext4)，文件名称大小写敏感，例如：MALL,Mail,mail,mAiL 以.开头的文件为隐藏文件 路径分隔的&#x2F; 文件名最长255个字节 包括路径在内文件名最长4095个字节 蓝色–&gt;目录">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-07-23T03:17:07.000Z">
+<meta property="article:modified_time" content="2022-07-23T03:37:02.888Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>文件管理 - 阴东</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/yindong.github.io/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"lannister163.github.io","root":"/yindong.github.io/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"knuxEHqBq6jIyCQJbdTG3FkD-gzGzoHsz","app_key":"cSdmOPjJK71fCLznx58yl98p","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/yindong.github.io/local-search.xml"};
+  </script>
+  <script  src="/yindong.github.io/js/utils.js" ></script>
+  <script  src="/yindong.github.io/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/yindong.github.io/">
+      <strong>Don&#39;t forget to smile</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/yindong.github.io/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/yindong.github.io/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/yindong.github.io/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/yindong.github.io/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/yindong.github.io/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/yindong.github.io/img/wenzhang.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="文件管理">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-07-23 03:17" pubdate>
+        2022年7月23日 凌晨
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      8.5k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      71 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- LeanCloud 统计文章PV -->
+      <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="leancloud-page-views"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">文件管理</h1>
+            
+            <div class="markdown-body">
+              <h2 id="3-文件管理"><a href="#3-文件管理" class="headerlink" title="3 文件管理"></a>3 文件管理</h2><h3 id="3-1-文件系统与目录结构"><a href="#3-1-文件系统与目录结构" class="headerlink" title="3.1 文件系统与目录结构"></a>3.1 文件系统与目录结构</h3><ul>
+<li>文件和目录被组织成一个单根倒置树结构</li>
+<li>文件系统从根目录下开始，用”/“表示</li>
+<li>根文件系统(rootfs)：root filesystem</li>
+<li>标准Linux文件系统(ext4)，文件名称大小写敏感，例如：MALL,Mail,mail,mAiL</li>
+<li>以.开头的文件为隐藏文件</li>
+<li>路径分隔的/</li>
+<li>文件名最长255个字节</li>
+<li>包括路径在内文件名最长4095个字节</li>
+<li>蓝色–&gt;目录  绿色–&gt;可执行文件 红色–&gt;压缩文件 浅蓝色–&gt;链接文件 灰色–&gt;其它文件</li>
+<li>除斜杠和NUL，所有字符都有效. 但使用特殊字符的目录名和文件不推荐使用，有些字符需要用引号来引用</li>
+<li>每个文件都有两类相关数据</li>
+</ul>
+<p>​        元数据: metadata</p>
+<p>​         数据：data</p>
+<p>Linux的文件系统分层结构：FHS (Filesystem Hierarchy Standard)</p>
+<p>参考文档：<a target="_blank" rel="noopener" href="http://www.pathname.com/fhs/">http://www.pathname.com/fhs/</a></p>
+<h3 id="3-2-常见的文件系统目录功能"><a href="#3-2-常见的文件系统目录功能" class="headerlink" title="3.2 常见的文件系统目录功能"></a>3.2 常见的文件系统目录功能</h3><p>/boot:引导文件存放目录，内核文件(vmlinuz)、引导加载器(bootloader, grub)都存放于此目录</p>
+<p>/bin:所有用户使用的基本命令;不能关联至独立分区，OS启动即会用到的程序</p>
+<p>/sbin:管理类的基本命令;不能关联至独立分区，OS启动即会用到的程序</p>
+<p>/lib:启动时程序依赖的基本共享库文件以及内核模块文件(/lib/modules)</p>
+<p>/lib64:专用于x86_64系统上的辅助共享库文件存放位置</p>
+<p>/etc:配置文件目录</p>
+<p>/home/USERNAME:普通用户家目录</p>
+<p>/root:管理员的家目录</p>
+<p>/media:便携式移动设备挂载点</p>
+<p>/mnt:临时文件系统挂载点</p>
+<p>/dev:设备文件及特殊文件存储位置</p>
+<p>​         b: block devide，随机访问</p>
+<p>​         c: character device，线性访问</p>
+<p>/opt:第三方应用程序的安装位置</p>
+<p>/sry:系统上运行的服务用到的数据</p>
+<p>/tmp:临时文件存储位置</p>
+<p>/usr: universal shared, read-only data</p>
+<p>  bin:保证系统拥有完整功能而提供的应用程序</p>
+<p>  sbin:</p>
+<p>  lib:..32位使用</p>
+<p>  lib64:只存在64位系统</p>
+<p>  include: c程序的头文件(header files)</p>
+<p>  share:结构化独立的数据，例如doc, man等</p>
+<p>​       local:第三方应用程序的安装位置</p>
+<p>​       bin, sbin, lib, lib64, etc, share</p>
+<p>/var: variable data files</p>
+<p>   cache:应用程序缓存数据目录</p>
+<p>   lib:应用程序状态信息数据</p>
+<p>   local:专用于为/usr/local下的应用程序存储可变数据</p>
+<p>   lock:锁文件</p>
+<p>   log:日志目录及文件</p>
+<p>   opt:专用于为/opt下的应用程序存储可变数据</p>
+<p>   run:运行中的进程相关数据,通常用于存储进程pid文件</p>
+<p>   spool:应用程序数据池</p>
+<p>   tmp:保存系统两次重启之间产生的临时数据</p>
+<p>/proc:用于输出内核与进程信息相关的虚拟文件系统</p>
+<p>/sys:用于输出当前系统上硬件设备相关信息虚拟文件系统</p>
+<p>/selinux: security enhanced Linux，selinux相关的安全策略等信息的存储位置</p>
+<p><strong>CentOS 7以后版本目录结构变化</strong></p>
+<ul>
+<li>/bin和/usr/bin</li>
+<li>/sbin和/usr/sbin</li>
+<li>/lib和/usr/lib</li>
+<li>/lib64和/usr/lib64</li>
+</ul>
+<p>范例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></div></td><td class="code"><pre><code class="hljs bash">[04:04:36 root@centos8 ~]<span class="hljs-comment">#ls /bin /sbin /lib /lib64 -ld</span><br>lrwxrwxrwx. 1 root root 7 11月  3 2020 /bin -&gt; usr/bin<br>lrwxrwxrwx. 1 root root 7 11月  3 2020 /lib -&gt; usr/lib<br>lrwxrwxrwx. 1 root root 9 11月  3 2020 /lib64 -&gt; usr/lib64<br>lrwxrwxrwx. 1 root root 8 11月  3 2020 /sbin -&gt; usr/sbin<br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="3-3-应用程序的组成部分"><a href="#3-3-应用程序的组成部分" class="headerlink" title="3.3 应用程序的组成部分"></a>3.3 应用程序的组成部分</h3><p>二进制程序:/bin,/sbin,/usr/bin, /usr/sbin,/ usr/local/bin, /usr/local/sbin</p>
+<p>库文件:/lib,/lib64, /usr/lib, / usr/lib64 ,/usr/local/lib,/usr/local/lib64</p>
+<p>配置文件:/etc,/etc/DIRECTORY,/usr/local/etc</p>
+<p>帮助文件:/usr/share/man, /usr/share/doc, /usr/local/share/man,/usr/local/share/doc</p>
+<h3 id="3-4-Linux下的文件类型"><a href="#3-4-Linux下的文件类型" class="headerlink" title="3.4 Linux下的文件类型"></a>3.4 Linux下的文件类型</h3><ul>
+<li>-普通文件</li>
+<li>d   目录文件</li>
+<li>b   块设备</li>
+<li>c    字符设备</li>
+<li>l     符号链接文件</li>
+<li>p   管道文件plpe</li>
+<li>s   套接字文件socket</li>
+</ul>
+<p><strong>dos2unix</strong>     windows文本格式转换成linux格式</p>
+<h2 id="4-文件操作命令"><a href="#4-文件操作命令" class="headerlink" title="4 文件操作命令"></a>4 文件操作命令</h2><h3 id="4-1-显示当前工作目录"><a href="#4-1-显示当前工作目录" class="headerlink" title="4.1 显示当前工作目录"></a>4.1 显示当前工作目录</h3><p>每个shell和系统进程都有一个当前的工作目录CWD: current work directory</p>
+<p>显示当前shell CWD的绝对路径</p>
+<p>pwd命令: printing working directory.···················································································································</p>
+<ul>
+<li>-P显示真实物理路径</li>
+<li>-L显示链接路径（默认〕</li>
+</ul>
+<h3 id="4-2-绝对和相对路径"><a href="#4-2-绝对和相对路径" class="headerlink" title="4.2 绝对和相对路径"></a>4.2 绝对和相对路径</h3><ul>
+<li>绝对路径</li>
+</ul>
+<p>​        以正斜杠开始，完整的文件位置路径，可用于任何想指定一个文件名的时候。</p>
+<ul>
+<li>相对路径</li>
+</ul>
+<p>​        不以斜线开始，指定相对于当前工作目录或某目录的位置，可以作为一个简短的形式指定一个文件名。</p>
+<p>基名: basename, 只取文件名而不要路径</p>
+<p>目录名：dirname，只取路径，不要文件名</p>
+<p>范例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">[04:23:23 root@centos8 ~]<span class="hljs-comment">#basename /etc/sysconfig/network</span><br>network<br>[04:41:01 root@centos8 ~]<span class="hljs-comment">#dirname /etc/sysconfig/network</span><br>/etc/sysconfig<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-3-更改目录"><a href="#4-3-更改目录" class="headerlink" title="4.3 更改目录"></a>4.3 更改目录</h3><p>命令cd : change directory改变目录</p>
+<p>选项: -Р切换至物理路径，而非软链接目录</p>
+<p>可以使用绝对或相对路径</p>
+<ul>
+<li>切换至父目录:cd ..</li>
+<li>切换至当前用户主目录:cd</li>
+<li>切换至以前的工作目录: cd -</li>
+</ul>
+<p>相关的环境变量：</p>
+<ul>
+<li>PWD：当前目录路径</li>
+<li>OLDPWD：上一次目录路径</li>
+</ul>
+<h3 id="4-4-列出目录内容-ls"><a href="#4-4-列出目录内容-ls" class="headerlink" title="4.4 列出目录内容 ls"></a>4.4 列出目录内容 ls</h3><p>ls命令可以列出当前目录的内容或指定目录</p>
+<p>常见选项：</p>
+<ul>
+<li>-a 包含隐藏文件</li>
+<li>-l 显示额外的信息</li>
+<li>-R 目录递归</li>
+<li>-ld 目录和符号链接信息</li>
+<li>-1 文件分行显示</li>
+<li>-S 按从大到小排序</li>
+<li>-t 按mtime排序</li>
+<li>-u 配个-t选项，显示并按atime从新到旧排序</li>
+<li>-U 按目录存放顺序显示</li>
+<li>-X 按文件后缀排序</li>
+</ul>
+<h3 id="4-5-查看文件状态-stat"><a href="#4-5-查看文件状态-stat" class="headerlink" title="4.5 查看文件状态 stat"></a>4.5 查看文件状态 stat</h3><p>文件相关信息：metadata，data</p>
+<p>每个文件有的三个时间戳：</p>
+<ul>
+<li>access time 访问时间， atlme，读取文件内容</li>
+<li>modlfy time 修改时间，mtime，改变文件内容（数据）</li>
+<li>change time 改变时间， ctime， 元数据发生改变</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash">[06:45:14 root@centos8 ~]<span class="hljs-comment">#stat anaconda-ks.cfg </span><br>  文件：anaconda-ks.cfg<br>  大小：1486      	块：8          IO 块：4096   普通文件<br>设备：802h/2050d	Inode：201944433   硬链接：1<br>权限：(0600/-rw-------)  Uid：(    0/    root)   Gid：(    0/    root)<br>环境：system_u:object_r:admin_home_t:s0<br>最近访问：2021-08-23 13:41:36.984990517 +0800<br>最近更改：2021-08-23 13:39:38.070235084 +0800<br>最近改动：2021-08-23 13:39:38.070235084 +0800<br>创建时间：-<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-6-确定文件内容-file"><a href="#4-6-确定文件内容-file" class="headerlink" title="4.6 确定文件内容 file"></a>4.6 确定文件内容 file</h3><p>文件可以包含多种类型的数据，使用file命令检查文件的类型，然后确定适当的打开命令或应用程序使用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">file [options] &lt;filename&gt;...<br></code></pre></td></tr></table></figure>
+
+<p>常用选项：</p>
+<ul>
+<li>-b 列出文件辨识结果时，不显示文件名称</li>
+<li>-f filelist 列出文件filelist中文件名的文件类型</li>
+<li>-F 使用指定分隔符号替换输出文件名后默认的”:”分隔符</li>
+<li>-L 查看对应软链接对应文件的文件类型</li>
+<li>–help 显示命令在线帮助</li>
+</ul>
+<h3 id="4-7-文件通配符模式-wild-card-pattern"><a href="#4-7-文件通配符模式-wild-card-pattern" class="headerlink" title="4.7 文件通配符模式 wild-card pattern"></a>4.7 文件通配符模式 wild-card pattern</h3><p>文件通配符可以用来匹配符合条件的多个文件，方便批理管理文件通配符采有特定的符号，表示特定的含义，此特符号称为元字符</p>
+<p>常见的通配符如下:</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-bullet">*</span> 匹配零个或多个字符<br>? 匹配任何单个字符<br>~ 当前用户家目录<br>~mage 用户mage家目录<br>~+和．当前工作目录<br>~- 前一个工作目录<br>[0-9] 匹配数字范围<br>[<span class="hljs-symbol">a-z</span>]:<span class="hljs-link">字母</span><br>[<span class="hljs-symbol">A-Z</span>]:<span class="hljs-link">字母</span><br>[wang] 匹配列表中的任何的一个字符<br>[^wang]匹配列表中的所有字符以外的字符<br></code></pre></td></tr></table></figure>
+
+<p>另外还有在Linux系统中预定义的字符类: man 7 glob</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs markdown">[<span class="hljs-symbol">:digit:</span>]:<span class="hljs-link">任意数字，相当于0-9</span><br>[<span class="hljs-symbol">:lower:</span>]:<span class="hljs-link">任意小写字母,表示a-z</span><br>[<span class="hljs-symbol">:upper:</span>]:<span class="hljs-link">任意大写字母,表示A-Z</span><br>[<span class="hljs-symbol">:alpha:</span>]:<span class="hljs-link">任意大小写字母</span><br>[<span class="hljs-symbol">:alnum:</span>]:<span class="hljs-link">任意数字或字母</span><br>[<span class="hljs-symbol">:blank:</span>]:<span class="hljs-link">水平空白字符</span><br>[<span class="hljs-symbol">:space:</span>]:<span class="hljs-link">水平或垂直空白字符</span><br>[<span class="hljs-symbol">:punct:</span>]:<span class="hljs-link">标点符号</span><br>[<span class="hljs-symbol">:print:</span>]:<span class="hljs-link">可打印字符</span><br>[<span class="hljs-symbol">:cntrl:</span>]:<span class="hljs-link">控制（非打印)字符</span><br>[<span class="hljs-symbol">:graph:</span>]:<span class="hljs-link">图形字符</span><br>[<span class="hljs-symbol">:xdigit:</span>]:<span class="hljs-link">十六进制字符</span><br></code></pre></td></tr></table></figure>
+
+<p>范例:</p>
+<p>1、显示/etc目录下所有以l开头，以一个小写字母结尾，且中间出现至少一位数字的文件或目录</p>
+<p>2、显示/etc目录下以任意一位数字开头，且以非数字结尾的文件或目录</p>
+<p>3、显示/etc/目录下以非字母开头，后面跟了一个字母及其它任意长度任意字符的文件或目录</p>
+<p>4、显示/etc/目录下所有以rc开头，并后面是0-6之间的数字，其它为任意字符的文件或目录</p>
+<p>5、显示/etc目录下，所有.conf结尾,且以m.n,r.p开头的文件或目录</p>
+<p>6、只显示/root下的隐藏文件和目录</p>
+<p>7、只显示/etc下的非隐藏目录</p>
+<h3 id="4-8-创建空文件和刷新时间"><a href="#4-8-创建空文件和刷新时间" class="headerlink" title="4.8 创建空文件和刷新时间"></a>4.8 创建空文件和刷新时间</h3><p>格式：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">touch</span> [option]... file...<br></code></pre></td></tr></table></figure>
+
+<p>选项说明:</p>
+<ul>
+<li>-a 仅改变atime和ctime </li>
+<li>-m 仅改变mtime和ctime</li>
+<li>-t [[CC]YY]MMDDhhmm[.ss] 指定atime和mtime的时间戳</li>
+<li>-c 如果文件不存在，则不予创建</li>
+</ul>
+<h3 id="4-9-复制文件和目录"><a href="#4-9-复制文件和目录" class="headerlink" title="4.9 复制文件和目录"></a>4.9 复制文件和目录</h3><p>利用cp命令可以实现文件或目录的复制</p>
+<p>格式：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cp</span> [option]... [-T] SOURCE DEST<br><span class="hljs-built_in">cp</span> [option]... SOURCE... DIRECTORY<br><span class="hljs-built_in">cp</span> [option]... -t DIRECTORY SOURCE...<br></code></pre></td></tr></table></figure>
+
+<p>常用选项</p>
+<ul>
+<li>-i    覆盖前提示</li>
+<li>-n  不覆盖，注意两者顺序</li>
+<li>-r,R  递归复制命令及内部的所有内容</li>
+<li>-a   归档，相当于-dR –preserv=all</li>
+<li>-d    –no-dereference –preserv=links 不复制原文件，只复制链接名</li>
+<li>–preserv[=ATTR_LIST]</li>
+</ul>
+<p>​          mode:权限 ；ownership:属主属组；…</p>
+<ul>
+<li>p等同–preserv=mode,ownership,timestamp</li>
+</ul>
+<p>​         -v  –verbose</p>
+<ul>
+<li>-f    –force</li>
+<li>u    –update只复制源比目标更新文件或目标不存在的文件</li>
+<li>-b    目标存在，覆盖前先备份，形式为filename~</li>
+<li>–backup=numbered目标存在，覆盖前先备份加数字后缀</li>
+</ul>
+<p><strong>范例</strong>：将/etc目录下的所有文件备份到/data独立的子目录下，并要求子目录格式为backupYYYY–mm–dd，备份过程可见。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">[06:29:14 root@centos8 ~]<span class="hljs-comment">#cp -av /etc/ /data/backup`date +%F`</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="4-10-移动和重命名文件"><a href="#4-10-移动和重命名文件" class="headerlink" title="4.10 移动和重命名文件"></a>4.10 移动和重命名文件</h3><p>mv命令可以实现文件或目录的移动和改名</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">mv</span> [option]... [-T] <span class="hljs-built_in">source</span> dest<br><span class="hljs-built_in">mv</span> [option]... <span class="hljs-built_in">source</span>... dircetory<br><span class="hljs-built_in">mv</span> [option]... -t dircetory <span class="hljs-built_in">source</span>...<br></code></pre></td></tr></table></figure>
+
+<p>常用选项：</p>
+<ul>
+<li>-i   交互式</li>
+<li>-f   强制</li>
+<li>-b   目标存在，覆盖前先备份</li>
+</ul>
+<p><strong>批量修改文件名</strong> ：rename</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">rename [options] &lt;expression&gt; &lt;replacement&gt; &lt;file&gt; ...<br></code></pre></td></tr></table></figure>
+
+<p>范例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#为所有的txt文件加上.bak后缀</span><br>[10:13:04 root@centos8 data]<span class="hljs-comment">#ls</span><br>f10.txt  f1.txt  f2.txt  f3.txt  f4.txt  f5.txt  f6.txt  f7.txt  f8.txt  f9.txt<br>[10:13:05 root@centos8 data]<span class="hljs-comment">#rename txt txt.bak *</span><br>[10:17:00 root@centos8 data]<span class="hljs-comment">#ls</span><br>f10.txt.bak  f1.txt.bak  f2.txt.bak  f3.txt.bak  f4.txt.bak  f5.txt.bak  f6.txt.bak  f7.txt.bak  f8.txt.bak  f9.txt.bak<br><br><span class="hljs-comment">#去掉所有文件的.bak后缀</span><br>[10:22:50 root@centos8 data]<span class="hljs-comment">#rename txt.bak txt *</span><br>[10:22:57 root@centos8 data]<span class="hljs-comment">#ls</span><br>f10.txt  f1.txt  f2.txt  f3.txt  f4.txt  f5.txt  f6.txt  f7.txt  f8.txt  f9.txt<br></code></pre></td></tr></table></figure>
+
+<h3 id="4-11-删除文件"><a href="#4-11-删除文件" class="headerlink" title="4.11 删除文件"></a>4.11 删除文件</h3><p>使用rm命令可以删除文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">rm</span> [option]... file...<br></code></pre></td></tr></table></figure>
+
+<p>常用选项：</p>
+<ul>
+<li>-i   交互式</li>
+<li>-f   强制删除</li>
+<li>-r   递归</li>
+<li>–no-preserver-root   删除/</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">rm</span> -rf /*<br></code></pre></td></tr></table></figure>
+
+<p>范例：删除特殊文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">将名为<span class="hljs-string">&#x27;/data/-f&#x27;</span>的文件删除<br><span class="hljs-built_in">rm</span> -- -f<br><span class="hljs-built_in">rm</span> ./-f<br><span class="hljs-built_in">rm</span> -f /data/-f<br><span class="hljs-built_in">rm</span> -f -f 此方法错误，因文件名跟选项相仿所以无法删除。<br></code></pre></td></tr></table></figure>
+
+<p>请注意，如果使用rm 来删除文件，通常仍可以将该文件恢复原状。如果想保证<br>该文件的内容无法还原，请考虑使用shred。</p>
+<p>常见选项：</p>
+<p>-z 最后一次覆盖添加0，以隐藏覆盖操作</p>
+<p>-v 能够显示操作进度</p>
+<p>-u 覆盖后截断并删除文件</p>
+<p>-n 指定覆盖文件内容的次数(默认值是3次)</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs bash">[10:09:53 root@centos8 data]<span class="hljs-comment">#shred -zvun 4 passwd.txt </span><br><span class="hljs-built_in">shred</span>: passwd.txt：第1 次，共5 次 (random)...<br><span class="hljs-built_in">shred</span>: passwd.txt：第2 次，共5 次 (ffffff)...<br><span class="hljs-built_in">shred</span>: passwd.txt：第3 次，共5 次 (000000)...<br><span class="hljs-built_in">shred</span>: passwd.txt：第4 次，共5 次 (random)...<br><span class="hljs-built_in">shred</span>: passwd.txt：第5 次，共5 次 (000000)...<br><span class="hljs-built_in">shred</span>: passwd.txt：正在删除<br><span class="hljs-built_in">shred</span>: passwd.txt：名称已更改为 0000000000<br><span class="hljs-built_in">shred</span>: 0000000000：名称已更改为 000000000<br><span class="hljs-built_in">shred</span>: 000000000：名称已更改为 00000000<br><span class="hljs-built_in">shred</span>: 00000000：名称已更改为 0000000<br><span class="hljs-built_in">shred</span>: 0000000：名称已更改为 000000<br><span class="hljs-built_in">shred</span>: 000000：名称已更改为 00000<br><span class="hljs-built_in">shred</span>: 00000：名称已更改为 0000<br><span class="hljs-built_in">shred</span>: 0000：名称已更改为 000<br><span class="hljs-built_in">shred</span>: 000：名称已更改为 00<br><span class="hljs-built_in">shred</span>: 00：名称已更改为 0<br><span class="hljs-built_in">shred</span>: passwd.txt：已删除<br>[10:10:26 root@centos8 data]<span class="hljs-comment">#ll</span><br>总用量 0<br></code></pre></td></tr></table></figure>
+
+<p>范例：设置rm别名为mv -t $DIR</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">[11:18:06 root@centos8 ~]<span class="hljs-comment">#alias rm=&#x27;DIR=/date/backup`date +%F-%T`;mkdir $DIR;mv -t $DIR&#x27;</span><br><span class="hljs-comment">#设置变量DIR，创建$DIR文件夹，设置别名</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="4-12-目录操作"><a href="#4-12-目录操作" class="headerlink" title="4.12 目录操作"></a>4.12 目录操作</h3><h4 id="4-12-1-显示目录树-tree"><a href="#4-12-1-显示目录树-tree" class="headerlink" title="4.12.1 显示目录树 tree"></a>4.12.1 显示目录树 tree</h4><p>常见选项：</p>
+<ul>
+<li>-d：只显示目录</li>
+<li>-L level：指定显示的层级数目</li>
+<li>-P pattern：只显示由指定wild-card pattern匹配到的路径</li>
+</ul>
+<h4 id="4-12-2-创建目录mkdir"><a href="#4-12-2-创建目录mkdir" class="headerlink" title="4.12.2 创建目录mkdir"></a>4.12.2 创建目录mkdir</h4><p>常用选项：</p>
+<ul>
+<li>-p：存在于不报错，且可自动创建所需的各目录</li>
+<li>-v：显示详细信息</li>
+<li>-m MODE：创建目录时直接指定权限</li>
+</ul>
+<h4 id="4-12-3-删除空目录rmdir"><a href="#4-12-3-删除空目录rmdir" class="headerlink" title="4.12.3 删除空目录rmdir"></a>4.12.3 删除空目录rmdir</h4><p>常见选项：</p>
+<ul>
+<li>-p 递归删除父空目录</li>
+<li>-v 显示详细信息</li>
+</ul>
+<p>注意：rmdir只能删除空目录，如果想删除非空目录，可以 使用rm -r命令，递归删除目录树</p>
+<p>练习</p>
+<p>1：创建/testdir/dir1/x,/testdir/dir1/y,/testdir/dir1/x/a,/testdir/dir1/x/b,/testdir/dir1/y/a,/testdir/dir1/y/b</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bahs">[02:48:13 root@centos8 /]#mkdir -pv /testdir/dir1/&#123;x,y&#125;/&#123;a,b&#125;<br>mkdir: 已创建目录 &#x27;/testdir&#x27;<br>mkdir: 已创建目录 &#x27;/testdir/dir1&#x27;<br>mkdir: 已创建目录 &#x27;/testdir/dir1/x&#x27;<br>mkdir: 已创建目录 &#x27;/testdir/dir1/x/a&#x27;<br>mkdir: 已创建目录 &#x27;/testdir/dir1/x/b&#x27;<br>mkdir: 已创建目录 &#x27;/testdir/dir1/y&#x27;<br>mkdir: 已创建目录 &#x27;/testdir/dir1/y/a&#x27;<br>mkdir: 已创建目录 &#x27;/testdir/dir1/y/b&#x27;<br></code></pre></td></tr></table></figure>
+
+<h2 id="5-文件元数据和节点表结构"><a href="#5-文件元数据和节点表结构" class="headerlink" title="5 文件元数据和节点表结构"></a>5 文件元数据和节点表结构</h2><h3 id="5-1-inode表结构"><a href="#5-1-inode表结构" class="headerlink" title="5.1 inode表结构"></a>5.1 inode表结构</h3><p>每个文件的属性信息，比如: 文件的大小，时间，类型等，称为元数据(meta data)。这些元数据是存放在node (index node）表中。node 表中有很多条记录组成，第一条记录对应的存放了一个文件的元数据信息第一个node表记录对应的保存了以下信息:</p>
+<ul>
+<li>inode number 节点号</li>
+<li>文件类型</li>
+<li>权限</li>
+<li>UID</li>
+<li>GID</li>
+<li>链接数(指向这个文件名路径名称个数)</li>
+<li>该文件的大小和不同的时间戳</li>
+<li>指向磁盘上文件的数据块指针</li>
+<li>有关文件的其他数据</li>
+</ul>
+<p><strong>目录</strong></p>
+<p>目录是个特殊文件，文件内容保存了目录中文件的列表及inode number</p>
+<ul>
+<li>文件引用一个是inode号</li>
+<li>人是通过文件名来引用一个文件</li>
+<li>一个目录时目录下的文件名和文件inode号之间的映射</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">[04:01:15 root@centos8 /]<span class="hljs-comment">#df /boot</span><br>文件系统         1K-块   已用   可用 已用% 挂载点<br>/dev/sda1      1038336 243480 794856   24% /boot<br>[04:03:16 root@centos8 /]<span class="hljs-comment">#df -i /boot</span><br>文件系统        Inode   已用(I) 可用(I) 已用(I)% 挂载点<br>/dev/sda1     524288   310    523978   1%     /boot  <br><span class="hljs-comment">#如果inode号（节点编号）用完在创建文件也会提示空间不足</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="5-2-硬链接ln"><a href="#5-2-硬链接ln" class="headerlink" title="5.2 硬链接ln"></a>5.2 硬链接ln</h3><p>硬链接本质上就是给一个文件起一个新的名称，实质是同一个文件</p>
+<p>硬链接特性</p>
+<ul>
+<li>创建硬链接会增加额外的记录项以引用文件</li>
+<li>对应于同一文件系统上一个物理文件</li>
+<li>每个目录引用相同的inode号</li>
+<li>创建时链接数递增</li>
+<li>删除文件时：rm命令递减计数的链接。文件要存在，至少有一个链接数，当链接数为零时，该文件被删除</li>
+<li>不能跨越驱动器或分区</li>
+<li>不支持对目录创建硬链接</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">ln</span> filename [linkname]<br></code></pre></td></tr></table></figure>
+
+<h3 id="5-3-符号（软）链接"><a href="#5-3-符号（软）链接" class="headerlink" title="5.3 符号（软）链接"></a>5.3 符号（软）链接</h3><p>一个符号链接指向另一个文件，就像windows中快捷方式，软链接文件和原文件本质上不是同一个文件。</p>
+<p><strong>软链接特点</strong></p>
+<ul>
+<li>一个符号链接的内容是它引用文件的名称</li>
+<li>可以对目录创建软链接</li>
+<li>可以跨分区的文件实现</li>
+<li>指向的是另一个文件的路径；其大小为指向的路径字符串的长度；不增加或减少目标文件inode的引用计数</li>
+<li>软链接如果使用相对路径，是相当于原文件的路径，而非相对于当前目录</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">ln</span> -s filename [linkname]<br></code></pre></td></tr></table></figure>
+
+<h3 id="5-4-硬链接和软链接区别总结"><a href="#5-4-硬链接和软链接区别总结" class="headerlink" title="5.4 硬链接和软链接区别总结"></a>5.4 硬链接和软链接区别总结</h3><p>1.本质：硬链接本质是同一个文件</p>
+<p>​               软链接本质不是同一个文件</p>
+<p>2.跨设备：硬链接不支持</p>
+<p>​                   软链接支持</p>
+<p>3.inode：硬链接相同</p>
+<p>​                  软链接不同</p>
+<p>4.链接数：硬链接创建新的硬链接，链接数会增加，删除硬链接会减少</p>
+<p>​                   软链接创建或删除，链接数不会变化</p>
+<p>5.文件夹：硬链接不支持</p>
+<p>​                   软链接支持</p>
+<p>6.相对路径：硬链接 原始文件相对路径是相对于当前工作目录</p>
+<p>​                       软链接 原始文件相对路径是相对于链接文件的相对路径</p>
+<p>7.删除源文件：硬链接不受影响，链接数减一，链接文件访问不受影响</p>
+<p>​                           软链接文件将无法访问</p>
+<p>8.文件类型：硬链接和源文件相同</p>
+<p>​                       软链接；链接文件和源文件无关</p>
+<span id="more"></span>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/yindong.github.io/categories/Linux/">Linux</a>
+                    
+                  </div>
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/yindong.github.io/2022/07/23/%E6%A0%87%E5%87%86I-O%E9%87%8D%E5%AE%9A%E5%90%91%E5%92%8C%E7%AE%A1%E9%81%93/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">标准I/O重定向和管道</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/yindong.github.io/2022/07/13/%E8%8E%B7%E5%8F%96%E5%B8%AE%E5%8A%A9/">
+                        <span class="hidden-mobile">获取帮助</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"knuxEHqBq6jIyCQJbdTG3FkD-gzGzoHsz","appKey":"cSdmOPjJK71fCLznx58yl98p","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/yindong.github.io/js/events.js" ></script>
+<script  src="/yindong.github.io/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/yindong.github.io/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/yindong.github.io/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+  <script defer src="/yindong.github.io/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/yindong.github.io/js/boot.js" ></script>
+
+
+</body>
+</html>

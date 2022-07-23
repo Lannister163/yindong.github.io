@@ -1,0 +1,643 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/yindong.github.io/img/favicon.png">
+  <link rel="icon" href="/yindong.github.io/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="6 标准I&#x2F;O重定向和管道6.1 标准输入和输出程序：指令+数据 读入数据：Input 输出数据：output 打开的文件都有一个fd: file descriptor(文件描述符) Linux给程序提供三种IO设备  标准输入  (STDIN)        -0  默认接受来自终端窗口的输入  标准输出  (STDOUT)    -1  默认输出到终端窗口  标准错误  (STDERR)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="标准I&#x2F;O重定向和管道">
+<meta property="og:url" content="https://lannister163.github.io/yindong.github.io/2022/07/23/%E6%A0%87%E5%87%86I-O%E9%87%8D%E5%AE%9A%E5%90%91%E5%92%8C%E7%AE%A1%E9%81%93/index.html">
+<meta property="og:site_name" content="阴东">
+<meta property="og:description" content="6 标准I&#x2F;O重定向和管道6.1 标准输入和输出程序：指令+数据 读入数据：Input 输出数据：output 打开的文件都有一个fd: file descriptor(文件描述符) Linux给程序提供三种IO设备  标准输入  (STDIN)        -0  默认接受来自终端窗口的输入  标准输出  (STDOUT)    -1  默认输出到终端窗口  标准错误  (STDERR)">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-07-23T03:30:39.000Z">
+<meta property="article:modified_time" content="2022-07-23T03:36:30.640Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>标准I/O重定向和管道 - 阴东</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/yindong.github.io/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"lannister163.github.io","root":"/yindong.github.io/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"knuxEHqBq6jIyCQJbdTG3FkD-gzGzoHsz","app_key":"cSdmOPjJK71fCLznx58yl98p","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/yindong.github.io/local-search.xml"};
+  </script>
+  <script  src="/yindong.github.io/js/utils.js" ></script>
+  <script  src="/yindong.github.io/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/yindong.github.io/">
+      <strong>Don&#39;t forget to smile</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/yindong.github.io/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/yindong.github.io/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/yindong.github.io/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/yindong.github.io/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/yindong.github.io/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/yindong.github.io/img/wenzhang.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="标准I/O重定向和管道">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-07-23 03:30" pubdate>
+        2022年7月23日 凌晨
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      6.5k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      55 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- LeanCloud 统计文章PV -->
+      <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="leancloud-page-views"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">标准I/O重定向和管道</h1>
+            
+            <div class="markdown-body">
+              <h2 id="6-标准I-O重定向和管道"><a href="#6-标准I-O重定向和管道" class="headerlink" title="6 标准I/O重定向和管道"></a>6 标准I/O重定向和管道</h2><h3 id="6-1-标准输入和输出"><a href="#6-1-标准输入和输出" class="headerlink" title="6.1 标准输入和输出"></a>6.1 标准输入和输出</h3><p>程序：指令+数据</p>
+<p>读入数据：Input</p>
+<p>输出数据：output</p>
+<p>打开的文件都有一个fd: file descriptor(文件描述符)</p>
+<p>Linux给程序提供三种IO设备</p>
+<ul>
+<li><p>标准输入  (STDIN)        -0  默认接受来自终端窗口的输入</p>
+</li>
+<li><p>标准输出  (STDOUT)    -1  默认输出到终端窗口</p>
+</li>
+<li><p>标准错误  (STDERR)     -2 默认输出到终端窗口 </p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><pre><code class="hljs bash">[11:40:55 root@centos8 ~]<span class="hljs-comment">#ll /dev/std*</span><br>lrwxrwxrwx. 1 root root 15 11月 25 10:56 /dev/stderr -&gt; /proc/self/fd/2<br>lrwxrwxrwx. 1 root root 15 11月 25 10:56 /dev/stdin -&gt; /proc/self/fd/0<br>lrwxrwxrwx. 1 root root 15 11月 25 10:56 /dev/stdout -&gt; /proc/self/fd/1<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-2-I-O重定向redirect"><a href="#6-2-I-O重定向redirect" class="headerlink" title="6.2 I/O重定向redirect"></a>6.2 I/O重定向redirect</h3><p>I/O重定向：将默认的输入，输出或错误对应的设备改变，指向新的目标</p>
+<h4 id="6-2-1-标准输出和错误重新定向"><a href="#6-2-1-标准输出和错误重新定向" class="headerlink" title="6.2.1 标准输出和错误重新定向"></a>6.2.1 标准输出和错误重新定向</h4><p>STDOUT和STDERR可以被重定向到文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">命令 操作符号 文件名<br></code></pre></td></tr></table></figure>
+
+<p> 支持的操作符号包括：</p>
+<p>1.1&gt;或&gt; 把STDOUT重定向到文件</p>
+<p>2.&gt;|强制覆盖      #优先级大于 set -C</p>
+<p>3.2&gt; 把STDERR重定向到文件</p>
+<p>4.&amp;&gt; 把所有输出重定向到文件</p>
+<p>以上如果文件已存在，文件内容会被覆盖</p>
+<p>set -C 禁止将内容覆盖已有文件，但可追加</p>
+<p>set +C 允许覆盖</p>
+<p><strong>&gt;&gt;可以再原有内容基础上，追加内容</strong></p>
+<p><strong>&gt;&gt; 追加标准输出重定向至文件</strong></p>
+<p>2&gt;&gt;追加标准错误重定向至文件</p>
+<p>标准输出和错误输出各自定向至不同位置</p>
+<p>COMMAND&gt;/path/to/file.out2&gt;/path/to/error.out</p>
+<p>合并标准输出和错误输出为同一个数据流进行重定向</p>
+<p>&amp;&gt;  覆盖重定向</p>
+<p>&amp;&gt;&gt; 追加重定向</p>
+<p>command&gt;/path/to/file.out 2&gt;&amp;1 (顺序很重要)</p>
+<p>command&gt;&gt;/path/to/file.out 2&gt;&amp;1</p>
+<p>()合并多个程序的STDOUT</p>
+<p>范例：清空/data/test.txt 该文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> /dev/null &gt; /data/test.txt    <span class="hljs-comment">#具有通用性，可在多个shell中使用</span><br>&gt; /data/test.txt      <span class="hljs-comment">#可在bash中使用</span><br></code></pre></td></tr></table></figure>
+
+<p>创建一个700M完全用0填充的大文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">dd</span> <span class="hljs-keyword">if</span>=/dev/zero of=/boot/bigfile bs=1M count=700                                       <br></code></pre></td></tr></table></figure>
+
+<p>分别重定向</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash">[11:53:12 root@centos8 ~]<span class="hljs-comment">#ls /data/ /xxx &gt; out.log 2&gt; err.log</span><br>[03:21:20 root@centos8 ~]<span class="hljs-comment">#ls</span><br>公共  模板  视频  图片  文档  下载  音乐  桌面  anaconda-ks.cfg  err.log  initial-setup-ks.cfg  out.log<br>[03:21:21 root@centos8 ~]<span class="hljs-comment">#cat err.log </span><br><span class="hljs-built_in">ls</span>: 无法访问<span class="hljs-string">&#x27;/xxx&#x27;</span>: 没有那个文件或目录<br>[03:21:26 root@centos8 ~]<span class="hljs-comment">#cat out.log </span><br>/data/:<br>backup11:25:33-2021-11-25<br>f1.txt<br></code></pre></td></tr></table></figure>
+
+<p>将标准输出和错误都重定向到同一个文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">[03:23:57 root@centos8 ~]<span class="hljs-comment">#ls /data/ /xxx &amp;&gt; /data/all.log</span><br>[03:24:44 root@centos8 ~]<span class="hljs-comment">#ls /data /xxx &gt; /data/all.log 2&gt;&amp;1</span><br>[03:25:38 root@centos8 ~]<span class="hljs-comment">#ls /data /xxx 2&gt; /data/all.log 1&gt;&amp;2</span><br>[03:25:46 root@centos8 ~]<span class="hljs-comment">#ls /data /xxx 2&gt;&amp;1 &gt; /data/all.log</span><br><span class="hljs-built_in">ls</span>: 无法访问<span class="hljs-string">&#x27;/xxx&#x27;</span>: 没有那个文件或目录<br></code></pre></td></tr></table></figure>
+
+<p>将两个命令的结果输出到一个文件里</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">[03:29:01 root@centos8 ~]<span class="hljs-comment">#(pwd;hostname) &gt;&gt; all.log </span><br>[03:29:54 root@centos8 ~]<span class="hljs-comment">#cat all.log </span><br>/root<br>centos8<br></code></pre></td></tr></table></figure>
+
+<h4 id="6-2-2-标准输入重定向"><a href="#6-2-2-标准输入重定向" class="headerlink" title="6.2.2 标准输入重定向"></a>6.2.2 标准输入重定向</h4><p>从文件中导入STDIN，代替当前终端的输入设备，使用&lt;来重定向标准输入某些命令能够接受从文件中导入的STDIN</p>
+<p>tr 转换和删除字符</p>
+<h5 id="6-2-2-1-tr命令"><a href="#6-2-2-1-tr命令" class="headerlink" title="6.2.2.1 tr命令"></a>6.2.2.1 tr命令</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">tr</span> [option]... set1 [set2]<br></code></pre></td></tr></table></figure>
+
+<p>选项：</p>
+<p>-c -C –complement:取字符集的补集</p>
+<p>-d –delete:册除所有属于第一字符集的字符</p>
+<p>-s–squeeze-repeats:把连续重复的字符以单独一个字符表示</p>
+<p>-t –truncate-set1:将第一个字符集对应字符转化为第二字符集对应的字符</p>
+<p>[:alnum:]：字母和数字</p>
+<p>[:alpha:]：字母</p>
+<p>[:digit:]：数字</p>
+<p>[:lower:i]：小写字母</p>
+<p>[:upper:]：大写字母</p>
+<p>[:space:]：空白字符</p>
+<p>[:print:]：可打印字符</p>
+<p>[:punct:]：标点符号</p>
+<p>[:graph:]：图形字符</p>
+<p>[:cntrl:]：控制(非打印)字符</p>
+<p>[:xdigit:]：十六进制字符</p>
+<p>范例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#删除/etc/fstab里的所有abc字符</span><br>[11:00:07 root@centos8 ~]<span class="hljs-comment">#tr -d abc &lt; /etc/fstab</span><br><span class="hljs-comment">#把/etc/fstab里的所有a-z都换成大写的A-Z</span><br>[11:00:07 root@centos8 ~]<span class="hljs-built_in">tr</span> <span class="hljs-string">&#x27;a-z&#x27;</span> <span class="hljs-string">&#x27;A-Z&#x27;</span> &lt; /etc/fstab<br><br>[10:57:38 root@centos8 ~]<span class="hljs-comment">#cat df.log </span><br>文件系统           1K-块    已用     可用 已用% 挂载点<br>devtmpfs         1870428       0  1870428    0% /dev<br>tmpfs            1899504       0  1899504    0% /dev/shm<br>tmpfs            1899504    9612  1889892    1% /run<br>tmpfs            1899504       0  1899504    0% /sys/fs/cgroup<br>/dev/sda2      104806400 5310672 99495728    6% /<br>/dev/sda1        1038336  243480   794856   24% /boot<br>/dev/sda3       52403200  398436 52004764    1% /data<br>tmpfs             379900       0   379900    0% /run/user/0<br>tmpfs             379900       4   379896    1% /run/user/1000<br>[10:57:41 root@centos8 ~]<span class="hljs-comment">#tr -s &#x27; &#x27; &lt; df.log </span><br>文件系统 1K-块 已用 可用 已用% 挂载点<br>devtmpfs 1870428 0 1870428 0% /dev<br>tmpfs 1899504 0 1899504 0% /dev/shm<br>tmpfs 1899504 9612 1889892 1% /run<br>tmpfs 1899504 0 1899504 0% /sys/fs/cgroup<br>/dev/sda2 104806400 5310672 99495728 6% /<br>/dev/sda1 1038336 243480 794856 24% /boot<br>/dev/sda3 52403200 398436 52004764 1% /data<br>tmpfs 379900 0 379900 0% /run/user/0<br>tmpfs 379900 4 379896 1% /run/user/1000<br>[10:58:03 root@centos8 ~]<span class="hljs-comment">#tr -s &#x27; &#x27; + &lt; df.log </span><br>文件系统+1K-块+已用+可用+已用%+挂载点<br>devtmpfs+1870428+0+1870428+0%+/dev<br>tmpfs+1899504+0+1899504+0%+/dev/shm<br>tmpfs+1899504+9612+1889892+1%+/run<br>tmpfs+1899504+0+1899504+0%+/sys/fs/cgroup<br>/dev/sda2+104806400+5310672+99495728+6%+/<br>/dev/sda1+1038336+243480+794856+24%+/boot<br>/dev/sda3+52403200+398436+52004764+1%+/data<br>tmpfs+379900+0+379900+0%+/run/user/0<br>tmpfs+379900+4+379896+1%+/run/user/1000<br></code></pre></td></tr></table></figure>
+
+
+
+<h5 id="6-2-2-2-标准输入重定向"><a href="#6-2-2-2-标准输入重定向" class="headerlink" title="6.2.2.2 标准输入重定向"></a>6.2.2.2 标准输入重定向</h5><p>利用&lt;可以将标准输入重定向</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs bash">[10:34:21 root@centos8 ~]<span class="hljs-comment">#cat &gt; test1                                      </span><br>hellow                                                                     <br>how are you                                                                <br>[10:34:43 root@centos8 ~]<span class="hljs-comment">#cat test1                                        </span><br>hellow                                                                     <br>how are you                                                                <br>[10:34:54 root@centos8 ~]<span class="hljs-comment">#cat &lt; test1 &gt; test2                              </span><br>[10:35:13 root@centos8 ~]<span class="hljs-comment">#cat test2                                        </span><br>hellow                                                                     <br>how are you           <br><span class="hljs-comment">####################################</span><br>[10:35:15 root@centos8 ~]<span class="hljs-comment">#echo 2+3+4 &gt; file                                </span><br>[10:39:49 root@centos8 ~]<span class="hljs-comment">#bc &lt; file                                        </span><br>9                                                                          <br>[10:39:54 root@centos8 ~]<span class="hljs-comment">#cat file                                         </span><br>2+3+4                           <br></code></pre></td></tr></table></figure>
+
+<h5 id="6-2-2-3-把多行重定向"><a href="#6-2-2-3-把多行重定向" class="headerlink" title="6.2.2.3 把多行重定向"></a>6.2.2.3 把多行重定向</h5><p>使用 &lt;&lt; 终止词命令从键盘把多行重定向给STDIN，直到终止词位置之前的所有文本都发送给STDIN，有时被称为就地文本(here documents)</p>
+<p>其中终止词可以是任何一个或多个符号，比如:!，EOF (End Of File) ,hahaha等，其中EOF比较常用</p>
+<p>范例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">[10:40:03 root@centos8 ~]<span class="hljs-comment">#cat &gt; t.txt &lt;&lt;!</span><br>&gt; <span class="hljs-built_in">test</span><br>&gt; hellow<br>&gt; !<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-3-管道"><a href="#6-3-管道" class="headerlink" title="6.3 管道"></a>6.3 管道</h3><h4 id="6-3-1-管道"><a href="#6-3-1-管道" class="headerlink" title="6.3.1 管道"></a>6.3.1 管道</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">[11:12:56 root@centos8 ~]<span class="hljs-comment">#echo 1+2 | bc</span><br>3<br>[11:13:36 root@centos8 ~]<span class="hljs-comment">#bc &lt; echo 1+2</span><br>-bash: <span class="hljs-built_in">echo</span>: 没有那个文件或目录<br></code></pre></td></tr></table></figure>
+
+
+
+<p>范例：管道对标准输出生效，标准错误不生效。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">[04:55:37 root@centos8 ~]<span class="hljs-comment">#ls /data /xxx</span><br><span class="hljs-built_in">ls</span>: 无法访问<span class="hljs-string">&#x27;/xxx&#x27;</span>: 没有那个文件或目录<br>/data:<br>all.log<br>[04:55:41 root@centos8 ~]<span class="hljs-comment">#ls /data /xxx | tr -s &#x27;a-z&#x27; &#x27;A-Z&#x27;</span><br><span class="hljs-built_in">ls</span>: 无法访问<span class="hljs-string">&#x27;/xxx&#x27;</span>: 没有那个文件或目录<br>/DATA:<br>AL.LOG<br></code></pre></td></tr></table></figure>
+
+<p>范例：用&amp;合并标准输出和错误输出为同一个数据流进行重定向的两种用法</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash">[04:56:04 root@centos8 ~]<span class="hljs-comment">#ls /data /xxx 2&gt;&amp;1| tr -s &#x27;a-z&#x27; &#x27;A-Z&#x27;</span><br>LS: 无法访问<span class="hljs-string">&#x27;/X&#x27;</span>: 没有那个文件或目录<br>/DATA:<br>AL.LOG<br><br>[04:59:48 root@centos8 ~]<span class="hljs-comment">#ls /data /xxx |&amp; tr -s &#x27;a-z&#x27; &#x27;A-Z&#x27;</span><br>LS: 无法访问<span class="hljs-string">&#x27;/X&#x27;</span>: 没有那个文件或目录<br>/DATA:<br>AL.LOG<br></code></pre></td></tr></table></figure>
+
+<p>范例：更改密码,减少交互。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">[05:00:22 root@centos8 ~]<span class="hljs-comment">#echo test | passwd --stdin yh</span><br>更改用户 yh 的密码 。<br>passwd：所有的身份验证令牌已经成功更新。<br>[05:10:14 root@centos8 ~]<span class="hljs-comment">#echo test1 | passwd --stdin yh &gt; /dev/null</span><br>[05:10:20 root@centos8 ~]<span class="hljs-comment"># 结果输出给/dev/null 就不会有提示</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="6-3-2-管道中的-符号"><a href="#6-3-2-管道中的-符号" class="headerlink" title="6.3.2 管道中的-符号"></a>6.3.2 管道中的-符号</h3><p>管道中有时会使用-符号</p>
+<p>示例：</p>
+<p>将/home里面的文件打包，但打包的数据不是记录到文件，而是传送到stdout，经过管道后，将tar-cvf-/home传送给后面的tar-xvf-，后面的这个-则是取前一个命令的stdout，因此，就不需要使用临时file了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">tar -cvf - /home | tar -xvf -<br></code></pre></td></tr></table></figure>
+
+<h3 id="6-3-3-tee-命令"><a href="#6-3-3-tee-命令" class="headerlink" title="6.3.3 tee 命令"></a>6.3.3 tee 命令</h3><p>用法：tee [选项]… [文件]…<br>将标准输入复制到每个指定文件，并显示到标准输出。</p>
+<p>利用tee命令可以重定向到多个目标</p>
+<p>格式：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">命令1 | <span class="hljs-built_in">tee</span> [-a] filename | 命令2<br></code></pre></td></tr></table></figure>
+
+<p>以上可以把命令1的stdout保存在文件中，作为命令2的输入</p>
+<p>选项： -a 追加</p>
+<p>功能    1：保存不同阶段的输出</p>
+<p>​            2：复杂管道的故障排除</p>
+<p>​            3：同时查看和记录输出</p>
+<p>范例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">[05:39:57 root@centos8 ~]<span class="hljs-comment">#cat test.log </span><br>hello<br>[05:40:07 root@centos8 ~]<span class="hljs-comment">#echo hello world | tee -a test.log </span><br>hello world<br>[05:40:23 root@centos8 ~]<span class="hljs-comment">#cat test.log </span><br>hello<br>hello world<br></code></pre></td></tr></table></figure>
+
+<p>范例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">[05:49:04 root@centos8 ~]<span class="hljs-comment">#cat  &lt;&lt;EOF | tee /etc/motd</span><br>&gt; hellow<br>&gt; <span class="hljs-built_in">test</span> <br>&gt; EOF<br>hellow<br><span class="hljs-built_in">test</span><br></code></pre></td></tr></table></figure>
+
+
+
+<p>练习：求1+2+3+…+100的总和</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash">[05:55:54 root@centos8 ~]<span class="hljs-comment">#echo &#123;1..100&#125;</span><br>1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100<br>[05:58:50 root@centos8 ~]<span class="hljs-comment">#echo &#123;1..100&#125; | tr &#x27; &#x27; +</span><br>1+2+3+4+5+6+7+8+9+10+11+12+13+14+15+16+17+18+19+20+21+22+23+24+25+26+27+28+29+30+31+32+33+34+35+36+37+38+39+40+41+42+43+44+45+46+47+48+49+50+51+52+53+54+55+56+57+58+59+60+61+62+63+64+65+66+67+68+69+70+71+72+73+74+75+76+77+78+79+80+81+82+83+84+85+86+87+88+89+90+91+92+93+94+95+96+97+98+99+100<br>[05:59:00 root@centos8 ~]<span class="hljs-comment">#echo &#123;1..100&#125; | tr &#x27; &#x27; + | bc</span><br>5050<br>[06:05:27 root@centos8 ~]<span class="hljs-comment">#seq -s + 1 100 | bc</span><br>5050<br>[06:03:09 root@centos8 ~]<span class="hljs-comment">#echo &#123;1..100..2&#125; | tr &#x27; &#x27; + | bc  #100内奇数的和</span><br>2500 <br>[06:06:34 root@centos8 ~]<span class="hljs-comment">#seq -s + 1 2 100 | bc</span><br>2500<br></code></pre></td></tr></table></figure>
+
+
+
+<span id="more"></span>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/yindong.github.io/categories/Linux/">Linux</a>
+                    
+                  </div>
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/yindong.github.io/2022/07/23/%E7%94%A8%E6%88%B7%E3%80%81%E7%BB%84%E5%92%8C%E6%9D%83%E9%99%90/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">用户、组和权限</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/yindong.github.io/2022/07/23/%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/">
+                        <span class="hidden-mobile">文件管理</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"knuxEHqBq6jIyCQJbdTG3FkD-gzGzoHsz","appKey":"cSdmOPjJK71fCLznx58yl98p","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/yindong.github.io/js/events.js" ></script>
+<script  src="/yindong.github.io/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/yindong.github.io/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/yindong.github.io/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+  <script defer src="/yindong.github.io/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/yindong.github.io/js/boot.js" ></script>
+
+
+</body>
+</html>

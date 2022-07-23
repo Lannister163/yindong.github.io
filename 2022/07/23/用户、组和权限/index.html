@@ -1,0 +1,962 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/yindong.github.io/img/favicon.png">
+  <link rel="icon" href="/yindong.github.io/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="7 用户、组和权限内容概述  Linux的安全模型 用户和组相关文件 用户和组管理命令 理解并设置文件权限 默认权限 特殊权限 文件访问控制列表  7.1 Linux安全模型资源分派：  Authentlcat;on: 认证；验证用户身份 Authorization：授权；不同的用户设置不同权限 Accouting|Audition：审计；  当用户登入时，系统会自动分配令牌token，包括用户表">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用户、组和权限">
+<meta property="og:url" content="https://lannister163.github.io/yindong.github.io/2022/07/23/%E7%94%A8%E6%88%B7%E3%80%81%E7%BB%84%E5%92%8C%E6%9D%83%E9%99%90/index.html">
+<meta property="og:site_name" content="阴东">
+<meta property="og:description" content="7 用户、组和权限内容概述  Linux的安全模型 用户和组相关文件 用户和组管理命令 理解并设置文件权限 默认权限 特殊权限 文件访问控制列表  7.1 Linux安全模型资源分派：  Authentlcat;on: 认证；验证用户身份 Authorization：授权；不同的用户设置不同权限 Accouting|Audition：审计；  当用户登入时，系统会自动分配令牌token，包括用户表">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-07-23T03:35:11.000Z">
+<meta property="article:modified_time" content="2022-07-23T03:36:15.434Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>用户、组和权限 - 阴东</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/yindong.github.io/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"lannister163.github.io","root":"/yindong.github.io/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"knuxEHqBq6jIyCQJbdTG3FkD-gzGzoHsz","app_key":"cSdmOPjJK71fCLznx58yl98p","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/yindong.github.io/local-search.xml"};
+  </script>
+  <script  src="/yindong.github.io/js/utils.js" ></script>
+  <script  src="/yindong.github.io/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/yindong.github.io/">
+      <strong>Don&#39;t forget to smile</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/yindong.github.io/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/yindong.github.io/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/yindong.github.io/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/yindong.github.io/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/yindong.github.io/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/yindong.github.io/img/wenzhang.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="用户、组和权限">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-07-23 03:35" pubdate>
+        2022年7月23日 凌晨
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      14k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      113 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- LeanCloud 统计文章PV -->
+      <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="leancloud-page-views"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">用户、组和权限</h1>
+            
+            <div class="markdown-body">
+              <h2 id="7-用户、组和权限"><a href="#7-用户、组和权限" class="headerlink" title="7 用户、组和权限"></a>7 用户、组和权限</h2><p><strong>内容概述</strong></p>
+<ul>
+<li>Linux的安全模型</li>
+<li>用户和组相关文件</li>
+<li>用户和组管理命令</li>
+<li>理解并设置文件权限</li>
+<li>默认权限</li>
+<li>特殊权限</li>
+<li>文件访问控制列表</li>
+</ul>
+<h3 id="7-1-Linux安全模型"><a href="#7-1-Linux安全模型" class="headerlink" title="7.1 Linux安全模型"></a>7.1 Linux安全模型</h3><p>资源分派：</p>
+<ul>
+<li>Authentlcat;on: 认证；验证用户身份</li>
+<li>Authorization：授权；不同的用户设置不同权限</li>
+<li>Accouting|Audition：审计；</li>
+</ul>
+<p>当用户登入时，系统会自动分配令牌token，包括用户表示和组成员等信息</p>
+<h4 id="7-1-1-用户"><a href="#7-1-1-用户" class="headerlink" title="7.1.1 用户"></a>7.1.1 用户</h4><p>Linux中每个用户是通过User ID （UID）来唯一标识</p>
+<ul>
+<li><p>管理员：root，0</p>
+</li>
+<li><p>普通用户：1-60000 自动分配</p>
+<ul>
+<li><p>系统用户：1-499（CentOS6以前），1-999（CentOS7以后）</p>
+<p>对守护进程获取资源进行权限分配</p>
+</li>
+<li><p>登入用户：500+ （CentOS6以前），1000+（CentOS7以后）</p>
+<p>交互式登入</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="7-1-2-用户组"><a href="#7-1-2-用户组" class="headerlink" title="7.1.2 用户组"></a>7.1.2 用户组</h4><p>Linux中可以将一个或多个用户加入用户组中，用户组通过Group ID （GID） 来唯一标识的。</p>
+<ul>
+<li>管理员组：root，0</li>
+<li>普通组：<ul>
+<li>系统组：1-499,1-999（CentOS7以后）对守护进程获取资源进行权限分配</li>
+<li>普通组：500+，1000+ (CentOS7以后）给用户使用</li>
+</ul>
+</li>
+</ul>
+<h4 id="7-1-3-用户和组的关系"><a href="#7-1-3-用户和组的关系" class="headerlink" title="7.1.3 用户和组的关系"></a>7.1.3 用户和组的关系</h4><ul>
+<li>用户的主要组(primary group):用户必须属于一个且只有一个主组，默认创建用户时会自动创建和用户名同名的组，做为用户的主要组，由于此组中只有一个用户，又称为私有组</li>
+<li>用户的附加组(supplementary group):一个用户可以属于零个或多个辅助组</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></div></td><td class="code"><pre><code class="hljs bash">[05:22:40 root@centos8 ~]<span class="hljs-comment">#id postfix</span><br>uid=89(postfix) gid=89(postfix) 组=89(postfix),12(mail)<br></code></pre></td></tr></table></figure>
+
+<h4 id="7-1-4-安全上下文"><a href="#7-1-4-安全上下文" class="headerlink" title="7.1.4 安全上下文"></a>7.1.4 安全上下文</h4><ul>
+<li><p>Linux安全上下文Context:运行中的程序，即进程(process)，以进程发起者的身份运行，进程所能够访问资源的权限取决于进程的运行者的身份</p>
+</li>
+<li><p>比如: root身份运行/bin/cat /etc/shadow和yh的身份运行/bin/cat /etc/shadow，得到的结果是不同的shadow能否能被访问是由运行者的身份决定，非程序本身</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">[05:27:10 root@centos8 ~]<span class="hljs-comment">#cat /etc/shadow</span><br>root:$6$YW6eWp5UdpNFxXP2<span class="hljs-variable">$WJ6AEr8nEF6HaVMKJOdmYFX3R4KMt6TY6J7HaYn4iWHejTvbyk684bGwNxDTwNY6GysvADLsM0XeTEMhkU3Pv0</span>::0:99999:7:::<br>bin:*:18397:0:99999:7:::<br>daemon:*:18397:0:99999:7:::<br>[05:28:10 yh@centos8 ~]<span class="hljs-comment">#cat /etc/shadow</span><br><span class="hljs-built_in">cat</span>: /etc/shadow: Permission denied<br></code></pre></td></tr></table></figure>
+
+<h3 id="7-2-用户和组的配置文件"><a href="#7-2-用户和组的配置文件" class="headerlink" title="7.2 用户和组的配置文件"></a>7.2 用户和组的配置文件</h3><h4 id="7-2-1-Linux用户和组的主要配置文件"><a href="#7-2-1-Linux用户和组的主要配置文件" class="headerlink" title="7.2.1 Linux用户和组的主要配置文件"></a>7.2.1 Linux用户和组的主要配置文件</h4><ul>
+<li><p>/etc/passwd: 用户及其属性信息(名称、UID、主组ID等)</p>
+</li>
+<li><p>/etc/shadow: 用户密码及其相关属性</p>
+</li>
+<li><p>/etc/group: 组及其属性信息</p>
+</li>
+<li><p>/etc/gshadow: 组密码及其相关属性</p>
+</li>
+</ul>
+<p>范例：Ubuntu启用root登入，并开启ssh远程登入root</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">root@hao-virtual-machine:~<span class="hljs-comment"># vim /etc/shadow</span><br><span class="hljs-comment">#取消root后的叹号 即可本地登入root</span><br>root@hao-virtual-machine:~<span class="hljs-comment"># vim /etc/ssh/sshd_config</span><br>！！！<span class="hljs-comment">#PermitRootLig prohibit-password 修改为 PermitRootLogin yes</span><br><span class="hljs-comment">#修改后即可远程登入root</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="7-2-2-passwd文件格式"><a href="#7-2-2-passwd文件格式" class="headerlink" title="7.2.2 passwd文件格式"></a>7.2.2 passwd文件格式</h4><p>login name：登入用名</p>
+<p>passwd：密码</p>
+<p>UID：用户身份编号</p>
+<p>GID：登录默认所在组编号</p>
+<p>GECOS：用户全名或注释</p>
+<p>home directory：用户主目录</p>
+<p>shell：用户默认使用的shell</p>
+<h4 id="7-2-3-shadow文件格式"><a href="#7-2-3-shadow文件格式" class="headerlink" title="7.2.3 shadow文件格式"></a>7.2.3 shadow文件格式</h4><ul>
+<li><p>登录用名</p>
+</li>
+<li><p>用户密码:—般用sha512加密</p>
+</li>
+<li><p>从1970年1月1日起到密码最近一次被更改的时间</p>
+</li>
+<li><p>密码再过几天可以被变更(0表示随时可被变更)</p>
+</li>
+<li><p>密码再过几天必须被变更(99999表示永不过期)</p>
+</li>
+<li><p>密码过期前几天系统提醒用户(默认为一周)</p>
+</li>
+<li><p>密码过期几天后帐号会被锁定</p>
+</li>
+<li><p>从1970年1月1日算起，多少天后帐号失效</p>
+</li>
+</ul>
+<p>更改密码加密算法</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">authconfig --passalgo=sha256 --update<br></code></pre></td></tr></table></figure>
+
+<p>密码的安全策略</p>
+<ul>
+<li>足够长</li>
+<li>使用数字、大写字母、小写字母及特殊字符中至少3种</li>
+<li>使用随机密码</li>
+<li>定期更换，不要使用最近曾经使用过的密码</li>
+</ul>
+<h4 id="7-2-4-group文件格式"><a href="#7-2-4-group文件格式" class="headerlink" title="7.2.4 group文件格式"></a>7.2.4 group文件格式</h4><p>群组名称：就是群组名称</p>
+<p>群组密码：通常不需要设定，密码是被记录在/etc/gshadow</p>
+<p>GID:就是群组的ID</p>
+<p>以当前组为附加组的用户列表(分隔符为逗号)</p>
+<h4 id="7-2-5-gshadow文件格式"><a href="#7-2-5-gshadow文件格式" class="headerlink" title="7.2.5 gshadow文件格式"></a>7.2.5 gshadow文件格式</h4><p>群组名称：就是群的名称</p>
+<p>群组密码：</p>
+<p>组管理员列表：组管理员的列表，更改组密码和成员</p>
+<p>以当前组为附加组的用户列表：多个用户间用逗号分隔</p>
+<h4 id="7-2-6-文件操作"><a href="#7-2-6-文件操作" class="headerlink" title="7.2.6 文件操作"></a>7.2.6 文件操作</h4><p>vipw和vigr</p>
+<p>pwck和grpck</p>
+<h3 id="7-3-用户和组管理命令"><a href="#7-3-用户和组管理命令" class="headerlink" title="7.3 用户和组管理命令"></a>7.3 用户和组管理命令</h3><p>用户管理命令</p>
+<ul>
+<li>useradd</li>
+<li>usermod</li>
+<li>userdel</li>
+</ul>
+<p>组账号维护命令</p>
+<ul>
+<li>groupadd</li>
+<li>groupmod</li>
+<li>groupdel</li>
+</ul>
+<h4 id="7-3-1-用户创建"><a href="#7-3-1-用户创建" class="headerlink" title="7.3.1 用户创建"></a>7.3.1 用户创建</h4><p>useradd 命令可以创建新的Linux用户</p>
+<p>格式：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">useradd [options] Login<br></code></pre></td></tr></table></figure>
+
+<p>常见选项：</p>
+<figure class="highlight diff"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs diff"><span class="hljs-deletion">-u：UID</span><br><br><span class="hljs-deletion">-o：配合-u选项，不检查UID的唯一性</span><br><br><span class="hljs-deletion">-g：GID 指明用户所属基本组，可为组名，也可以GID</span><br><br><span class="hljs-deletion">-c：‘comment’ 用户的注释信息</span><br><br><span class="hljs-deletion">-d：HOME_DIR 以指定的路径（不存在）为家目录</span><br><br><span class="hljs-deletion">-s：SHELL 指明用户的默认shell程序，可用列表在/etc/shells文件中</span><br><br><span class="hljs-deletion">-G：group1，group2...   为用户指明附加组，组须事先存在</span><br><br><span class="hljs-deletion">-N：不创建私用组做主组，使用users组做主组</span><br><br><span class="hljs-deletion">-r：创建系统用户CentOS6之前：ID&lt;500，CentOS7以后：ID&lt;1000</span><br><br><span class="hljs-deletion">-m：创建家目录，用于系统用户</span><br><br><span class="hljs-deletion">-M：不创建家目录，用于非系统用户</span><br></code></pre></td></tr></table></figure>
+
+<p>范例：创建账户</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">[03:07:33 root@c~]<span class="hljs-comment">#useradd -r -u 48 -s /sbin/nologin -d /var/www -c &quot;Apache&quot; apache</span><br></code></pre></td></tr></table></figure>
+
+<p>useradd命令默认值设定由/etc/default/useradd定义</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash">[07:40:51 root@centos8 ~]<span class="hljs-comment">#cat /etc/default/useradd</span><br><span class="hljs-comment"># useradd defaults file</span><br>GROUP=100<br>HOME=/home<br>INACTIVE=-1<br>EXPIRE=<br>SHELL=/bin/bash<br>SKEL=/etc/skel<br>CREATE_MAIL_SPOOL=<span class="hljs-built_in">yes</span><br></code></pre></td></tr></table></figure>
+
+<p>显示或更改默认设置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">useradd -D<br>useradd -D -s SHELL<br>useradd -D -b BASE_DIR<br>useradd -D -g GROUP<br></code></pre></td></tr></table></figure>
+
+<p>新建用户的相关文件</p>
+<ul>
+<li>/etc/default/useradd    规则</li>
+<li>/etc/skel/*                      家目录里默认生成的文件</li>
+<li>/etc/login.defs               默认密码规则</li>
+</ul>
+<p>批量创建用户</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">newusers passwd格式文件<br></code></pre></td></tr></table></figure>
+
+<p>批量修改用户口令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">echo</span> username:passwd | chpasswd<br></code></pre></td></tr></table></figure>
+
+<h4 id="7-3-2-用户属性修改"><a href="#7-3-2-用户属性修改" class="headerlink" title="7.3.2 用户属性修改"></a>7.3.2 用户属性修改</h4><p>usermod命令可以修改用户属性</p>
+<p>格式：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">usermod [OPTION] login<br></code></pre></td></tr></table></figure>
+
+<p>常见选项：</p>
+<p>-u:UID:新UID</p>
+<p>-g:GID:新主组</p>
+<p>-G:GROUP1[GROUP2.…[GROUPNJ]:新附加组，原来的附加组将会被覆盖;若保留原有，则要同时使用-a选项</p>
+<p>-s:SHELL:新的默认SHELL</p>
+<p>-c:’COMMENT’:新的注释信息</p>
+<p>-d:HOME:新家目录不会自动创建;若要创建新家目录并移动原家数据，同时使用-m选项</p>
+<p>-l:login_name:新的名字</p>
+<p>-L:lock指定用户,在/etcl/shadow密码栏的增加!</p>
+<p>-U:unlock指定用户,将/etc/shadow密码栏的!拿掉</p>
+<p>-e:YYY-MM-DD:指明用户账号过期日期</p>
+<p>-f:INACTIVE:设定非活动期限</p>
+<h4 id="7-3-3-删除用户"><a href="#7-3-3-删除用户" class="headerlink" title="7.3.3 删除用户"></a>7.3.3 删除用户</h4><p>userdel 可删除Linux用户</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">userdel [options]... Login<br></code></pre></td></tr></table></figure>
+
+<p>常见选项：</p>
+<p>-f，强制</p>
+<p>-r，删除用户家目录和邮箱</p>
+<h4 id="7-3-4-查看用户相关的ID信息"><a href="#7-3-4-查看用户相关的ID信息" class="headerlink" title="7.3.4 查看用户相关的ID信息"></a>7.3.4 查看用户相关的ID信息</h4><p>id命令可以查看用户的UID，GID等信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">id</span> [option]... [user]<br></code></pre></td></tr></table></figure>
+
+<p>-u:显示UID</p>
+<p>-g:显示GID</p>
+<p>-G:显示用户所属的组的ID</p>
+<p>-n:显示名称，需配合ugG使用</p>
+<h4 id="7-3-5-切换用户或以其他用户身份执行命令"><a href="#7-3-5-切换用户或以其他用户身份执行命令" class="headerlink" title="7.3.5 切换用户或以其他用户身份执行命令"></a>7.3.5 切换用户或以其他用户身份执行命令</h4><p>su 命令可以切换用户身份，并且以指定用户的身份执行命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">su [options...] [-] [user [args...]]<br></code></pre></td></tr></table></figure>
+
+<p>切换用户的方式：</p>
+<ul>
+<li>su username：非登入切换，既不会读取目标用户配置文件。不改变当前工作目录</li>
+<li>su -username：登入切换，会读取目标用户的配置文件，切换至家目录，完全切换</li>
+</ul>
+<p>说明：root su至其他用户无需密码；非root用户切换时需要密码</p>
+<p>换个身份执行命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">su [-] username -c <span class="hljs-string">&#x27;command&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p>:chestnut:切换到root账户执行getent shadow后退回到yh</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">[04:38:15 yh@centos8 ~]<span class="hljs-variable">$su</span> - root -c <span class="hljs-string">&quot;getent shadow&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>选项：-l  –login su -l username 相当于 su -username</p>
+<h4 id="7-3-6-设置密码"><a href="#7-3-6-设置密码" class="headerlink" title="7.3.6 设置密码"></a>7.3.6 设置密码</h4><p>passwd 可以修改用户密码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">passwd [options...] username<br></code></pre></td></tr></table></figure>
+
+<p>常用选项：</p>
+<p>-d:删除指定用户密码</p>
+<p>-l:锁定指定用户</p>
+<p>-u:解锁指定用户</p>
+<p>-e:强制用户下次登入修改密码</p>
+<p>-f:强制操作</p>
+<p>-n:指定最短使用期限</p>
+<p>-x:最大使用期限</p>
+<p>-w:提前多少天开始警告</p>
+<p>-i:非活动期限    </p>
+<p>–stdin:从标准输入接受用户密码</p>
+<p>:chestnut:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">echo</span> <span class="hljs-string">&quot;password&quot;</span> | passwd --stdin username<br></code></pre></td></tr></table></figure>
+
+<h4 id="7-3-7-修改用户密码策略"><a href="#7-3-7-修改用户密码策略" class="headerlink" title="7.3.7 修改用户密码策略"></a>7.3.7 修改用户密码策略</h4><p>chage 可以修改用户密码策略</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">chage [options...] login<br></code></pre></td></tr></table></figure>
+
+<p>选项:</p>
+<p>-d:last_day.    最近一次密码设置时间设为“最近日期”</p>
+<p>-m:–mindays min_days. 最小口令有效期</p>
+<p>-M:–maxdays mac_days.  最大口令有效期。</p>
+<p>-W:–warndays warn_days 将过期警告天数设为“警告天数”</p>
+<p>-I:–inactive inactive 密码过期后的宽限期</p>
+<p>-E:–expiredate expire_date 用户的有效期</p>
+<p>-:查看用户密码规则</p>
+<p>:chestnut:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash">chage -d 0 tom <span class="hljs-comment">#下一次登入强制重设密码</span><br>[02:14:02 root@centos8 ~]<span class="hljs-comment">#chage -m 3 -M 42 -W 14 -I 7 -E 2099-12-12 yh</span><br>[02:14:43 root@centos8 ~]<span class="hljs-comment">#chage -l yh</span><br>最近一次密码修改时间					：11月 26, 2021<br>密码过期时间					：1月 07, 2022<br>密码失效时间					：1月 14, 2022<br>帐户过期时间						：12月 12, 2099<br>两次改变密码之间相距的最小天数		：3<br>两次改变密码之间相距的最大天数		：42<br>在密码过期之前警告的天数	：14<br></code></pre></td></tr></table></figure>
+
+<h4 id="7-3-8-用户相关的其它命令"><a href="#7-3-8-用户相关的其它命令" class="headerlink" title="7.3.8 用户相关的其它命令"></a>7.3.8 用户相关的其它命令</h4><p>chfn 指定个人信息</p>
+<p>chsh 指定shell</p>
+<p>finger 可看用户个人信息</p>
+<p>:chestnut:更改shell类型</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash">[02:34:19 root@centos8 ~]<span class="hljs-comment">#chsh -s /bin/sh yh</span><br>正在更改 yh 的 shell。<br>shell 已更改。<br>[02:34:40 root@centos8 ~]<span class="hljs-comment">#getent passwd yh</span><br>yh:x:1000:1000:Yh:/home/yh:/bin/sh<br>-----------------------------------------------------<br>[02:34:55 root@centos8 ~]<span class="hljs-comment">#usermod -s /bin/bash yh</span><br>[02:37:40 root@centos8 ~]<span class="hljs-comment">#getent passwd yh</span><br>yh:x:1000:1000:Yh:/home/yh:/bin/bash<br></code></pre></td></tr></table></figure>
+
+<p>:chestnut:修改用户为不可登入的shell类型</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs bash">[07:44:34 root@centos8 ~]<span class="hljs-comment">#getent passwd yh</span><br>yh:x:1000:1000:Yh:/home/yh:/bin/bash<br>[07:44:55 root@centos8 ~]<span class="hljs-comment">#chsh -s /sbin/nologin yh</span><br>正在更改 yh 的 shell。<br>chsh: 警告：“/sbin/nologin”未在 /etc/shells 中列出。<br>shell 已更改。<br>[07:45:13 root@centos8 ~]<span class="hljs-comment">#getent passwd yh</span><br>yh:x:1000:1000:Yh:/home/yh:/sbin/nologin<br>[07:45:21 root@centos8 ~]<span class="hljs-comment">#su - yh</span><br>This account is currently not available.<br>[07:45:41 root@centos8 ~]<span class="hljs-comment">#chsh -s /bin/false yh</span><br>正在更改 yh 的 shell。<br>chsh: 警告：“/bin/false”未在 /etc/shells 中列出。<br>shell 已更改。<br>[07:47:45 root@centos8 ~]<span class="hljs-comment">#getent passwd yh</span><br>yh:x:1000:1000:Yh:/home/yh:/bin/false<br>[07:48:02 root@centos8 ~]<span class="hljs-comment">#su - yh</span><br>[07:48:06 root@centos8 ~]<span class="hljs-comment">#</span><br>[07:48:06 root@centos8 ~]<span class="hljs-comment">#usermod -s /bin/bash yh</span><br>[07:48:50 root@centos8 ~]<span class="hljs-comment">#su - yh</span><br>[07:48:55 yh@centos8 ~]$<br></code></pre></td></tr></table></figure>
+
+
+
+<h4 id="7-3-9-管理组"><a href="#7-3-9-管理组" class="headerlink" title="7.3.9 管理组"></a>7.3.9 管理组</h4><p><strong>创建组</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">groupadd [option...] groupname   <span class="hljs-comment">#创建组</span><br></code></pre></td></tr></table></figure>
+
+<p>选项:   -g:GID号     -r:创建系统组</p>
+<p>:chestnut:创建GID48的系统组apache</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">groupadd -g 48 -r apache<br></code></pre></td></tr></table></figure>
+
+<p><strong>修改组</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">groupmod [option...] groupname    <span class="hljs-comment">#修改组</span><br></code></pre></td></tr></table></figure>
+
+<p>选项:   -n: 新名字     -g:新的GID</p>
+<p><strong>删除组</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">groupdel [option...] groupname     <span class="hljs-comment">#删除组</span><br></code></pre></td></tr></table></figure>
+
+<p>选项：-f 强制删除，即使是用户的主组也强制删除组</p>
+<p><strong>更改组密码</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">gpasswd [options...] groupname   <span class="hljs-comment">#更改组密码</span><br></code></pre></td></tr></table></figure>
+
+<p>常见选项：-a user :将user添加至指定组中；-d user :从指定组中移除用户user；</p>
+<p>-A user1，user2.设置有管理员权限的用户列表。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash">[03:06:20 root@centos8 ~]<span class="hljs-comment">#groupadd admin</span><br>[03:10:05 root@centos8 ~]<span class="hljs-comment">#id yh</span><br>uid=1000(yh) gid=1000(yh) 组=1000(yh),10(wheel)<br>[03:10:08 root@centos8 ~]<span class="hljs-comment">#gpasswd -a yh admin</span><br>正在将用户“yh”加入到“admin”组中<br>[03:10:24 root@centos8 ~]<span class="hljs-comment">#id yh</span><br>uid=1000(yh) gid=1000(yh) 组=1000(yh),10(wheel),1001(admin)<br>[03:10:26 root@centos8 ~]<span class="hljs-comment">#gpasswd -d yh admin</span><br>正在将用户“yh”从“admin”组中删除<br>[03:11:43 root@centos8 ~]<span class="hljs-comment">#id yh</span><br>uid=1000(yh) gid=1000(yh) 组=1000(yh),10(wheel)<br></code></pre></td></tr></table></figure>
+
+<p><strong>临时切换主组</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">newgrp [-] [group]    <span class="hljs-comment">#临时切换主组</span><br></code></pre></td></tr></table></figure>
+
+<p>使用-选项，可以初始化用户环境 </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><code class="hljs bash">[03:00:34 yh@centos8 ~]<span class="hljs-variable">$id</span><br>uid=1000(yh) gid=1000(yh) 组=1000(yh),10(wheel)<br>[03:00:42 yh@centos8 ~]<span class="hljs-variable">$newgrp</span> root<br>密码：<br>newgrp: failed to crypt password with previous salt: 无效的参数<br>[03:00:54 yh@centos8 ~]<span class="hljs-variable">$gpasswd</span> root<br>gpasswd：没有权限。<br>[03:01:05 yh@centos8 ~]<span class="hljs-variable">$sudo</span> gpasswd root<br>[sudo] yh 的密码：<br>正在修改 root 组的密码<br>新密码：<br>请重新输入新密码：<br>[03:01:26 yh@centos8 ~]<span class="hljs-variable">$newgrp</span> root<br>密码：<br>[03:01:37 yh@centos8 ~]<span class="hljs-variable">$id</span><br>uid=1000(yh) gid=0(root) 组=0(root),10(wheel),1000(yh)<br>[03:01:40 yh@centos8 ~]<span class="hljs-variable">$touch</span> <span class="hljs-built_in">test</span><br>[03:03:08 yh@centos8 ~]<span class="hljs-variable">$ll</span><br>-rw-r--r--  1 yh root 0 12月  2 15:03 <span class="hljs-built_in">test</span><br>[03:03:09 yh@centos8 ~]<span class="hljs-variable">$exit</span><br><span class="hljs-built_in">exit</span><br>[03:03:19 yh@centos8 ~]<span class="hljs-variable">$id</span><br>uid=1000(yh) gid=1000(yh) 组=1000(yh),10(wheel)<br>[03:03:22 yh@centos8 ~]<span class="hljs-variable">$touch</span> test1<br>[03:03:29 yh@centos8 ~]<span class="hljs-variable">$ll</span><br>-rw-r--r--  1 yh root 0 12月  2 15:03 <span class="hljs-built_in">test</span><br>-rw-rw-r--  1 yh yh   0 12月  2 15:03 test1<br></code></pre></td></tr></table></figure>
+
+<p><strong>更改和查看组成员</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">groupmems [options..] [action动作]<br></code></pre></td></tr></table></figure>
+
+<p>选项：<br>  -g, –group groupname         更改组 groupname，而不是用户的组(只 root)<br>  -R, –root CHROOT_DIR         chroot 到的目录</p>
+<p>动作：<br>  -a, –add username            将用户 username 添加到组成员中<br>  -d, –delete username         从组的成员中删除用户 username<br>  -h, –help                    显示此帮助信息并推出<br>  -p, –purge                   从组中移除所有成员<br>  -l, –list                    列出组中的所有成员</p>
+<h3 id="7-4-文件管理权限"><a href="#7-4-文件管理权限" class="headerlink" title="7.4 文件管理权限"></a>7.4 文件管理权限</h3><h4 id="7-4-1-文件所有者和属组属性操作"><a href="#7-4-1-文件所有者和属组属性操作" class="headerlink" title="7.4.1 文件所有者和属组属性操作"></a>7.4.1 文件所有者和属组属性操作</h4><h5 id="7-4-1-1-设置文件的所有者chown"><a href="#7-4-1-1-设置文件的所有者chown" class="headerlink" title="7.4.1.1 设置文件的所有者chown"></a>7.4.1.1 设置文件的所有者chown</h5><p>chown命令可以修改文件的属主，也可以修改文件属组</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">用法：<span class="hljs-built_in">chown</span> [选项]... [所有者] [:[组]] 文件...<br>　或：<span class="hljs-built_in">chown</span> [选项]... --reference=参考文件 文件...<br></code></pre></td></tr></table></figure>
+
+<p>:chestnut:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs bash">[09:03:17 root@centos8 ~]<span class="hljs-comment">#touch test              #更改test文件的所有者和所属组为yh</span><br>[09:09:26 root@centos8 ~]<span class="hljs-comment">#ll test</span><br>-rw-r--r-- 1 root root 0 12月  2 21:09 <span class="hljs-built_in">test</span><br>[09:09:29 root@centos8 ~]<span class="hljs-comment">#chown yh:yh test</span><br>[09:09:45 root@centos8 ~]<span class="hljs-comment">#ll test</span><br>-rw-r--r-- 1 yh yh 0 12月  2 21:09 <span class="hljs-built_in">test</span><br>--------------------------------------------<br>[09:33:44 root@centos8 ~]<span class="hljs-comment">#ll test1                 #更改test1文件的所属组为yh</span><br>-rw-r--r-- 1 root root 0 12月  2 21:24 test1<br>[09:33:46 root@centos8 ~]<span class="hljs-comment">#chown :yh test1</span><br>[09:33:55 root@centos8 ~]<span class="hljs-comment">#ll test1</span><br>-rw-r--r-- 1 root yh 0 12月  2 21:24 test1<br>--------------------------------------------<br>[09:24:36 root@centos8 ~]<span class="hljs-comment">#ll test1 test2         #参考test2的所有者和所属组来修改test1</span><br>-rw-r--r-- 1 yh   yh   0 12月  2 21:24 test1<br>-rw-r--r-- 1 root root 0 12月  2 21:24 test2<br>[09:24:41 root@centos8 ~]<span class="hljs-comment">#chown --reference=test2 test1</span><br>[09:25:02 root@centos8 ~]<span class="hljs-comment">#ll test1 test2</span><br>-rw-r--r-- 1 root root 0 12月  2 21:24 test1<br>-rw-r--r-- 1 root root 0 12月  2 21:24 test2<br></code></pre></td></tr></table></figure>
+
+<h4 id="7-4-2-文件权限"><a href="#7-4-2-文件权限" class="headerlink" title="7.4.2 文件权限"></a>7.4.2 文件权限</h4><h5 id="7-4-2-1-文件权限说明"><a href="#7-4-2-1-文件权限说明" class="headerlink" title="7.4.2.1 文件权限说明"></a>7.4.2.1 文件权限说明</h5><p><strong>文件的权限主要针对三类对象进行定义</strong></p>
+<ul>
+<li><p>owner 属主 u</p>
+</li>
+<li><p>group  属组 g</p>
+</li>
+<li><p>other   其他 o</p>
+</li>
+</ul>
+<p><strong>每个文件针对每类访问者都定义了三种权限</strong></p>
+<ul>
+<li><p>r   readable</p>
+</li>
+<li><p>w  writable</p>
+</li>
+<li><p>x  excutable</p>
+</li>
+</ul>
+<p><strong>对文件的权限</strong></p>
+<ul>
+<li><p>r   可使用文件查看类工具获取其内容</p>
+</li>
+<li><p>w  可修改其内容</p>
+</li>
+<li><p>x   可以把此文件提请内核启动为一 个进程</p>
+</li>
+</ul>
+<p><strong>对目录的权限</strong></p>
+<ul>
+<li>r  可以使用Is查看此目录中文件列表</li>
+<li>w 可在此目录中创建文件， 也可删除此目录中的文件</li>
+<li>x  可以使用ls -I查看此目录中文件元数据(须配合r) ，可以cd进入此目录</li>
+<li>X  只给目录x权限，不给无执行权限的文件x权限</li>
+</ul>
+<p>![截屏2021-12-03 下午12.59.52](../../../Documents/Typroa-Linux基础入门-photo/截屏2021-12-03 下午12.59.52.png)</p>
+<p>八进制数字</p>
+<p>— 000     0</p>
+<p>–x 001    1</p>
+<p>-w- 010   2</p>
+<p>-wx 011  3</p>
+<p>r– 100    4</p>
+<p>r-x 101    5</p>
+<p>rw- 110   6</p>
+<p>rwx 111  7</p>
+<p>🌰</p>
+<p>640  rw-r—–</p>
+<p>755  rwxr-xr-x</p>
+<p>面试题</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">执行 <span class="hljs-built_in">cp</span> /etc/issue /data/dir/ 所需的最小权限<br>/bin/cp    x<br>/etc       x<br>/etc/issue r<br>/data      x<br>/data/dir  w x<br></code></pre></td></tr></table></figure>
+
+<h5 id="7-4-2-2-修改文件权限chmod"><a href="#7-4-2-2-修改文件权限chmod" class="headerlink" title="7.4.2.2 修改文件权限chmod"></a>7.4.2.2 修改文件权限chmod</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">用法：<span class="hljs-built_in">chmod</span> [选项]... 模式[,模式]... 文件...<br>　或：<span class="hljs-built_in">chmod</span> [选项]... 八进制模式 文件...<br>　或：<span class="hljs-built_in">chmod</span> [选项]... --reference=参考文件 文件...<br></code></pre></td></tr></table></figure>
+
+<p>说明：</p>
+<p>-R：递归修改权限</p>
+<p>修改一类用户的所有权限</p>
+<p>u= ;g= ;o= ;ug= ;a= ;　</p>
+<p>修改一类用户某位或某些位权限</p>
+<p>u+ ;u- ;g+ ;o- ;a+ ;</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs bash">[10:12:46 root@centos8 ~]<span class="hljs-comment">#ll test1 test2</span><br>-rw-r--r-- 1 root yh   0 12月  2 21:24 test1<br>-rw-r--r-- 1 root root 0 12月  2 21:24 test2<br>[10:13:42 root@centos8 ~]<span class="hljs-comment">#chmod ug= test1</span><br>[10:14:03 root@centos8 ~]<span class="hljs-comment">#ll test1</span><br>-------r-- 1 root yh 0 12月  2 21:24 test1<br>[10:14:06 root@centos8 ~]<span class="hljs-comment">#chmod a= test1</span><br>[10:14:20 root@centos8 ~]<span class="hljs-comment">#ll test1</span><br>---------- 1 root yh 0 12月  2 21:24 test1<br>[10:14:22 root@centos8 ~]<span class="hljs-comment">#chmod a+r test1</span><br>[10:15:28 root@centos8 ~]<span class="hljs-comment">#ll test1</span><br>-r--r--r-- 1 root yh 0 12月  2 21:24 test1<br>[10:15:29 root@centos8 ~]<span class="hljs-comment">#chmod u+w,g+x test1</span><br>[10:16:08 root@centos8 ~]<span class="hljs-comment">#ll test1</span><br>-rw-r-xr-- 1 root yh 0 12月  2 21:24 test1<br>[10:16:11 root@centos8 ~]<span class="hljs-comment">#chmod g-r test1</span><br>[10:16:45 root@centos8 ~]<span class="hljs-comment">#ll test1</span><br>-rw---xr-- 1 root yh 0 12月  2 21:24 test1<br></code></pre></td></tr></table></figure>
+
+<h4 id="7-4-3-新建文件和目录的默认权限"><a href="#7-4-3-新建文件和目录的默认权限" class="headerlink" title="7.4.3 新建文件和目录的默认权限"></a>7.4.3 新建文件和目录的默认权限</h4><p>umask的值可以用来保留在创建文件权限</p>
+<p>实现方式：</p>
+<ul>
+<li>新建文件的默认权限：666-umask，如果所得结果某位存在执行(奇数)，则将其权限+1</li>
+<li>新建目录的默认权限：777-umask</li>
+</ul>
+<p>非特权用户umask默认是002</p>
+<p>root的umask默认是022</p>
+<p>查看umask</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">umask</span> <br><span class="hljs-comment">#模式方式显示</span><br><span class="hljs-built_in">umask</span> -S <br><span class="hljs-comment">#输出可被调用</span><br><span class="hljs-built_in">umask</span> -p<br></code></pre></td></tr></table></figure>
+
+<p>修改umask</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">umask</span> <span class="hljs-comment">#</span><br><span class="hljs-built_in">umask</span> 002<br><span class="hljs-built_in">umask</span> u=rw,g=r,0=<br></code></pre></td></tr></table></figure>
+
+<p>持久保存umask</p>
+<ul>
+<li>全局设置：/etc/bashrc</li>
+<li>用户设置：~/.bashrc</li>
+</ul>
+<h4 id="7-4-4-Linux文件系统上的特殊权限"><a href="#7-4-4-Linux文件系统上的特殊权限" class="headerlink" title="7.4.4 Linux文件系统上的特殊权限"></a>7.4.4 Linux文件系统上的特殊权限</h4><p>前面介绍了三种常见的权限:r,w,x。还有三种特殊权限：SUID，SGID，Sticky</p>
+<h5 id="7-4-4-1-特殊权限SUID"><a href="#7-4-4-1-特殊权限SUID" class="headerlink" title="7.4.4.1 特殊权限SUID"></a>7.4.4.1 特殊权限SUID</h5><p>安全上下文</p>
+<p>前提： 进程有属主和属组。 文件有属主和属组。</p>
+<ol>
+<li><p>任何一个可执行程序文件能不能启动为进程， 取决于发起者对程序文件是否拥有执行权限。</p>
+</li>
+<li><p>启动为进程之后，其进程的属主为发起者，进程的属组发起者所属的组。</p>
+</li>
+<li><p>进程访问文件时的权限，取决于进程的发起者。</p>
+<p>(a)进程的发起者，同文件的属主，则应用文件属主权限</p>
+<p>(b)进程的发起者，属于文件属组；则应用文件属组权限</p>
+<p>(c)应用文件“其它”权限</p>
+</li>
+</ol>
+<p>二进制可执行文件上SUID权限功能：</p>
+<ul>
+<li>任何一个可执行程序文件能不能启动为进程:取决发起者对程序文件是否拥有执行权限</li>
+<li>启动为进程之后，其进程的属主为原程序文件的属主</li>
+<li>SUID只对二进制可执行程序有效</li>
+<li>SUID设置在目录上无意义</li>
+</ul>
+<h5 id="7-4-4-2-特殊权限SGID"><a href="#7-4-4-2-特殊权限SGID" class="headerlink" title="7.4.4.2 特殊权限SGID"></a>7.4.4.2 特殊权限SGID</h5><p>二进制的可执行文件上SGID权限功能</p>
+<ul>
+<li>任何一个可执行程序文件能不能启动为进程取决于发起者对程序文件是否拥有执行权限</li>
+<li>启动为进程后，其进程的属组为原程序文件的属组</li>
+</ul>
+<p>SGID权限设定</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">chmod</span> g+s file...<br><span class="hljs-built_in">chmod</span> 2xxx file...<br><span class="hljs-built_in">chmod</span> g-s file...<br></code></pre></td></tr></table></figure>
+
+<p>目录上的SGID权限功能</p>
+<p>默认情况下，用户创建文件时，其属组为此用户所属的主组，一旦某目录被设定了SGID，则对此目录有写权限的用户在此目录中创建的文件所属的组为此目录的属组，通常用于创建一个协作目录。</p>
+<p>SGID权限设定</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">chmod</span> g+s <span class="hljs-built_in">dir</span>...<br><span class="hljs-built_in">chmod</span> 2xxx <span class="hljs-built_in">dir</span>...<br><span class="hljs-built_in">chmod</span> g-s <span class="hljs-built_in">dir</span>...<br></code></pre></td></tr></table></figure>
+
+<h5 id="7-4-4-3-特殊权限sticky位"><a href="#7-4-4-3-特殊权限sticky位" class="headerlink" title="7.4.4.3 特殊权限sticky位"></a>7.4.4.3 特殊权限sticky位</h5><p>具有写权限的目录通常用户可以删除该目录中的任何文件,无论该文件的权限或拥有权在目录设置Sticky位,只有文件的所有者或root可以删除该文件sticky设置在文件.上无意义</p>
+<p>Sticky权限设定：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">chmod</span> o+t <span class="hljs-built_in">dir</span>...<br><span class="hljs-built_in">chmod</span> 1xxx <span class="hljs-built_in">dir</span>...<br><span class="hljs-built_in">chmod</span> o-t <span class="hljs-built_in">dir</span>...<br></code></pre></td></tr></table></figure>
+
+<h5 id="7-4-4-5-特殊权限字法"><a href="#7-4-4-5-特殊权限字法" class="headerlink" title="7.4.4.5 特殊权限字法"></a>7.4.4.5 特殊权限字法</h5><p>SUID SGID Sticky</p>
+<p>000 0</p>
+<p>001 1</p>
+<p>010 2</p>
+<p>011 3</p>
+<p>100 4</p>
+<p>101 5</p>
+<p>110 6</p>
+<p>111 7</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs bash">[09:55:38 root@centos8 ~]<span class="hljs-comment">#ll test1</span><br>-rw---xr-- 1 root yh 0 12月  2 21:24 test1<br>[09:55:43 root@centos8 ~]<span class="hljs-comment">#chmod 4614 test1</span><br>[09:56:18 root@centos8 ~]<span class="hljs-comment">#ll test1</span><br>-rwS--xr-- 1 root yh 0 12月  2 21:24 test1<br>--------------------------------------------------<br>[09:55:38 root@centos8 ~]<span class="hljs-comment">#ll test1</span><br>-rw---xr-- 1 root yh 0 12月  2 21:24 test1<br>[09:55:43 root@centos8 ~]<span class="hljs-comment">#chmod 2614 test1</span><br>[09:56:18 root@centos8 ~]<span class="hljs-comment">#ll test1</span><br>-rw---sr-- 1 root yh 0 12月  2 21:24 test1<br>--------------------------------------------------<br>[09:55:38 root@centos8 ~]<span class="hljs-comment">#ll test1</span><br>-rw---xr-- 1 root yh 0 12月  2 21:24 test1<br>[09:55:43 root@centos8 ~]<span class="hljs-comment">#chmod 1614 test1</span><br>[09:56:18 root@centos8 ~]<span class="hljs-comment">#ll test1</span><br>-rw---xr-S 1 root yh 0 12月  2 21:24 test1<br></code></pre></td></tr></table></figure>
+
+<p>权限位映射</p>
+<p>SUID：user，占据属主的执行权限位</p>
+<p>​        s：属主拥有x权限</p>
+<p>​        S：属主没有x权限</p>
+<p>SGID：group，占据属组的执行权限位</p>
+<p>​        s：group拥有x权限</p>
+<p>​        S：group没有x权限</p>
+<p>Sticky：other，占据other的执行权限位</p>
+<p>​        t：other拥有x权限</p>
+<p>​        T：other没有x权限</p>
+<h4 id="7-4-5-设定文件特殊属性"><a href="#7-4-5-设定文件特殊属性" class="headerlink" title="7.4.5 设定文件特殊属性"></a>7.4.5 设定文件特殊属性</h4><p>设置文件的特殊属性，防止可以访问root用户误操作删除或修改文件</p>
+<p>不能删除，改名，更改</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">chattr +i<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash">[10:17:38 root@centos8 ~]<span class="hljs-comment">#lsattr t1 t2</span><br>-------------------- t1<br>-------------------- t2<br>[10:17:45 root@centos8 ~]<span class="hljs-comment">#chattr +i t1</span><br>[10:18:02 root@centos8 ~]<span class="hljs-comment">#lsattr t1 t2</span><br>----i--------------- t1<br>-------------------- t2<br>[10:18:07 root@centos8 ~]<span class="hljs-comment">#rm -f t1</span><br><span class="hljs-built_in">rm</span>: 无法删除<span class="hljs-string">&#x27;t1&#x27;</span>: 不允许的操作<br>[10:18:48 root@centos8 ~]<span class="hljs-comment">#echo hellow &gt;&gt; t1</span><br>-bash: t1: 不允许的操作<br>[10:18:59 root@centos8 ~]<span class="hljs-comment">#mv t1 test1</span><br><span class="hljs-built_in">mv</span>: 无法将<span class="hljs-string">&#x27;t1&#x27;</span> 移动至<span class="hljs-string">&#x27;test1&#x27;</span>: 不允许的操作<br></code></pre></td></tr></table></figure>
+
+<p>只能追加内容</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">chattr +a<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs bash">[10:21:11 root@centos8 ~]<span class="hljs-comment">#chattr +a t1</span><br>[10:21:17 root@centos8 ~]<span class="hljs-comment">#lsattr t1</span><br>-----a-------------- t1<br>[10:21:24 root@centos8 ~]<span class="hljs-comment">#mv t1 /t1</span><br><span class="hljs-built_in">mv</span>: 无法将<span class="hljs-string">&#x27;t1&#x27;</span> 移动至<span class="hljs-string">&#x27;/t1&#x27;</span>: 不允许的操作<br>[10:24:38 root@centos8 ~]<span class="hljs-comment">#rm -f t1</span><br><span class="hljs-built_in">rm</span>: 无法删除<span class="hljs-string">&#x27;t1&#x27;</span>: 不允许的操作<br>[10:25:12 root@centos8 ~]<span class="hljs-comment">#echo hello world &gt; t1</span><br>-bash: t1: 不允许的操作<br>[10:27:09 root@centos8 ~]<span class="hljs-comment">#echo hello world &gt;&gt; t1</span><br>[10:27:23 root@centos8 ~]<span class="hljs-comment">#cat t1</span><br>hello world<br></code></pre></td></tr></table></figure>
+
+<p>显示特定属性</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">lsattr<br></code></pre></td></tr></table></figure>
+
+<h4 id="7-4-6-访问控制列表"><a href="#7-4-6-访问控制列表" class="headerlink" title="7.4.6 访问控制列表"></a>7.4.6 访问控制列表</h4><h5 id="7-4-6-1-ACL权限功能"><a href="#7-4-6-1-ACL权限功能" class="headerlink" title="7.4.6.1 ACL权限功能"></a>7.4.6.1 ACL权限功能</h5><p>ACL: Access Control List，实现灵活的权限管理</p>
+<p>除了文件的所有者，所属组和其它人，可以对更多的用户设置权限</p>
+<p>CentOS7 默认创建的xfs和ext4文件系统具有ACL功能</p>
+<p>CentOS7之前版本，默认手工创建的ext4文件系统无ACL功能,需手动增加</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">tune2fs -o acl /dev/sdb1<br>mount -o acl /dev/sdb1 /mnt/test<br></code></pre></td></tr></table></figure>
+
+<p>ACL生效顺序:</p>
+<p>所有者,自定义用户,所属组|自定义组,其他人</p>
+<h5 id="7-4-6-2-ACL相关命令"><a href="#7-4-6-2-ACL相关命令" class="headerlink" title="7.4.6.2 ACL相关命令"></a>7.4.6.2 ACL相关命令</h5><p>setfacl可以设置ACL权限</p>
+<p>选项: -m:修改文件的当前ACL</p>
+<p>​          -x :从文件的ACL中删除条目</p>
+<p>getfacl可查看设置的ACL权限</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs bash">05:38:12 root@centos8 ~]<span class="hljs-comment">#setfacl -m u:yh:- t2</span><br>[05:38:26 root@centos8 ~]<span class="hljs-comment">#getfacl t2</span><br><span class="hljs-comment"># file: t2</span><br><span class="hljs-comment"># owner: root</span><br><span class="hljs-comment"># group: root</span><br>user::rw-<br>user:yh:---<br>group::r--<br>mask::r--<br>other::r--<br>[05:40:57 yh@centos8 root]<span class="hljs-variable">$cat</span> t2<br><span class="hljs-built_in">cat</span>: t2: 权限不够<br>[05:42:48 root@centos8 ~]<span class="hljs-comment">#setfacl -m u:yh:rw t2</span><br>[05:43:20 yh@centos8 ~]<span class="hljs-variable">$cat</span> /root/t2<br>[05:43:27 yh@centos8 ~]<span class="hljs-variable">$echo</span> hellow &gt;&gt; /root/t2<br>[05:43:44 yh@centos8 ~]<span class="hljs-variable">$cat</span> /root/t2<br>hellow<br></code></pre></td></tr></table></figure>
+
+<p>清除所有ACL权限: setfacl -b filename</p>
+<p><strong>备份和还原ACL</strong></p>
+<p>主要的文件操作命令cp和mv都支持ACL,只是cp命令需要加上-p参数.但是tar等常见的备份工具是不会保留目录和文件的ACL信息.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#备份ACL</span><br>getfacl -R /tmp/dir &gt; acl.txt<br><span class="hljs-comment">#消除ACL权限</span><br>setfacl -R -b /tmp/dir<br><span class="hljs-comment">#还原ACL权限</span><br>setfacl -R --set-file=acl.txt /tmp/dir<br><span class="hljs-comment">#还原ACL权限</span><br>setfacl --restore acl.txt<br><span class="hljs-comment">#查看ACL权限</span><br>getfacl -R /tmp/dir<br></code></pre></td></tr></table></figure>
+
+
+
+<span id="more"></span>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/yindong.github.io/categories/Linux/">Linux</a>
+                    
+                  </div>
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/yindong.github.io/2022/07/23/%E6%A0%87%E5%87%86I-O%E9%87%8D%E5%AE%9A%E5%90%91%E5%92%8C%E7%AE%A1%E9%81%93/">
+                        <span class="hidden-mobile">标准I/O重定向和管道</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"knuxEHqBq6jIyCQJbdTG3FkD-gzGzoHsz","appKey":"cSdmOPjJK71fCLznx58yl98p","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/yindong.github.io/js/events.js" ></script>
+<script  src="/yindong.github.io/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/yindong.github.io/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/yindong.github.io/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+  <script defer src="/yindong.github.io/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/yindong.github.io/js/boot.js" ></script>
+
+
+</body>
+</html>

@@ -1,0 +1,652 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/yindong.github.io/img/favicon.png">
+  <link rel="icon" href="/yindong.github.io/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1 获得帮助获得帮助的能力决定了技术的能力！ 多层次的帮助  whatis command –help man and info &#x2F;usr&#x2F;share&#x2F;doc&#x2F; Red Hat documentation 其它网站和搜索  1.1 whatiswhatis 使用数据库来显示命令的简短描述, 系统刚安装后不可立即使用，需要制作数据库。 1234#Centos7 版本以后mandb#Centos6 版">
+<meta property="og:type" content="article">
+<meta property="og:title" content="获取帮助">
+<meta property="og:url" content="https://lannister163.github.io/yindong.github.io/2022/07/13/%E8%8E%B7%E5%8F%96%E5%B8%AE%E5%8A%A9/index.html">
+<meta property="og:site_name" content="阴东">
+<meta property="og:description" content="1 获得帮助获得帮助的能力决定了技术的能力！ 多层次的帮助  whatis command –help man and info &#x2F;usr&#x2F;share&#x2F;doc&#x2F; Red Hat documentation 其它网站和搜索  1.1 whatiswhatis 使用数据库来显示命令的简短描述, 系统刚安装后不可立即使用，需要制作数据库。 1234#Centos7 版本以后mandb#Centos6 版">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-07-13T03:11:34.000Z">
+<meta property="article:modified_time" content="2022-07-23T03:14:26.052Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>获取帮助 - 阴东</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/yindong.github.io/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"lannister163.github.io","root":"/yindong.github.io/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"knuxEHqBq6jIyCQJbdTG3FkD-gzGzoHsz","app_key":"cSdmOPjJK71fCLznx58yl98p","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/yindong.github.io/local-search.xml"};
+  </script>
+  <script  src="/yindong.github.io/js/utils.js" ></script>
+  <script  src="/yindong.github.io/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/yindong.github.io/">
+      <strong>Don&#39;t forget to smile</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/yindong.github.io/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/yindong.github.io/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/yindong.github.io/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/yindong.github.io/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/yindong.github.io/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/yindong.github.io/img/wenzhang.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="获取帮助">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-07-13 03:11" pubdate>
+        2022年7月13日 凌晨
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      2.2k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      19 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- LeanCloud 统计文章PV -->
+      <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="leancloud-page-views"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">获取帮助</h1>
+            
+            <div class="markdown-body">
+              <h2 id="1-获得帮助"><a href="#1-获得帮助" class="headerlink" title="1 获得帮助"></a>1 获得帮助</h2><p>获得帮助的能力决定了技术的能力！</p>
+<p>多层次的帮助</p>
+<ul>
+<li>whatis</li>
+<li>command –help</li>
+<li>man and info</li>
+<li>/usr/share/doc/</li>
+<li>Red Hat documentation</li>
+<li>其它网站和搜索</li>
+</ul>
+<h3 id="1-1-whatis"><a href="#1-1-whatis" class="headerlink" title="1.1 whatis"></a>1.1 whatis</h3><p>whatis 使用数据库来显示命令的简短描述, 系统刚安装后不可立即使用，需要制作数据库。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment">#Centos7 版本以后</span><br>mandb<br><span class="hljs-comment">#Centos6 版本以前</span><br>makewhatis<br></code></pre></td></tr></table></figure>
+
+<h3 id="1-2-查看命令的帮助"><a href="#1-2-查看命令的帮助" class="headerlink" title="1.2 查看命令的帮助"></a>1.2 查看命令的帮助</h3><p>内部命令: </p>
+<ul>
+<li>help COMMAND</li>
+<li>man bash</li>
+</ul>
+<p>外部命令和软件: </p>
+<ul>
+<li><p>COMMAND –helo 或 COMMAND -h</p>
+</li>
+<li><p>使用手册（manual）</p>
+<p>man COMMAND</p>
+</li>
+<li><p>信息页 info COMMAND</p>
+</li>
+<li><p>程序自身的帮助文档 README INSTALL Changelog</p>
+</li>
+<li><p>程序官方文档 官方站点 ： Documentation</p>
+</li>
+<li><p>发行版的官方文档</p>
+</li>
+<li><p>（7）Google</p>
+</li>
+</ul>
+<h3 id="1-3-man命令"><a href="#1-3-man命令" class="headerlink" title="1.3 man命令"></a>1.3 man命令</h3><p>man提供命令帮助的文件，手册也存放在/usr/share/man；几乎每个命令都有man的“页面”</p>
+<p>中文man需要安装包man-pages-zh-CN； man页面分组为不同的”章节“，统称为Linux手册，man 1 man</p>
+<ul>
+<li>1：用户命令</li>
+<li>2：系统调用（内核提供的函数）</li>
+<li>3：库调用（程序库中的函数）</li>
+<li>4：设备文件及特殊文件（通常位于/dev）</li>
+<li>5：文件格式和规范：如/etc/passwd</li>
+<li>6：游戏</li>
+<li>7：杂项（包括宏包和规范，如 man(7)，groff(7) ）</li>
+<li>8：系统管理命令(通常只针对 root 用户)</li>
+<li>9：Linux内核API （非标准）</li>
+</ul>
+<p>man命令的配置文件:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">/etc/man.config     <span class="hljs-comment">#centos6 之前man的配置文件</span><br>/etc/man_db.conf    <span class="hljs-comment">#centos7 之后man的配置文件</span><br>/etc/manpath.config <span class="hljs-comment">#ubuntu man的配置文件</span><br></code></pre></td></tr></table></figure>
+
+<p>格式：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">MANPATH /PATH/TO/SOMEWHERE   <span class="hljs-comment">#指明man文件搜索位置</span><br></code></pre></td></tr></table></figure>
+
+<p>也可以指定位置下搜索COMMAND命令的手册页并显示</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">man -M /PATH/TP/SOMEWHERE COMMAND<br></code></pre></td></tr></table></figure>
+
+<p>查看man手册页</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">man &#123;章节&#125; keyword<br></code></pre></td></tr></table></figure>
+
+<p>man帮助段落说明</p>
+<ul>
+<li>NAME 名称及简要说明</li>
+<li>SYNOPSIS 用法格式说明</li>
+<li>[] 可选内容</li>
+<li>&lt;&gt; 必选内容</li>
+<li>a | b 二选一</li>
+<li>{} 分组</li>
+<li>… 同一内容可出现多次</li>
+<li>DESCRIPTION 描述（详细说明）</li>
+<li>OPTIONS 选项说明</li>
+<li>EXAMPLES 示例</li>
+<li>FILES  相关文件</li>
+<li>AUTHOR 作者</li>
+<li>COPYRIGHT 版本信息</li>
+<li>REPORTING BUGS bug 信息</li>
+<li>SEE ALSO  其它帮助参考</li>
+</ul>
+<p>列出所有帮助</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">man -a keyword<br></code></pre></td></tr></table></figure>
+
+<p>搜索man手册</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">man -k keyword <span class="hljs-comment">#列出所有匹配的页面，使用whatis 数据库</span><br></code></pre></td></tr></table></figure>
+
+<p>相当于whatis</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">man -f keyword<br></code></pre></td></tr></table></figure>
+
+<p>打印man帮助文件的路径</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">man -w [章节] keyword <br><br>范例：<br>[04:11:11 root@centos8 motd.d]<span class="hljs-comment">#man -w 1 date                                              /usr/share/man/man1/date.1.gz   </span><br></code></pre></td></tr></table></figure>
+
+
+
+<h3 id="1-4-设置登入前后显示信息"><a href="#1-4-设置登入前后显示信息" class="headerlink" title="1.4 设置登入前后显示信息"></a>1.4 设置登入前后显示信息</h3><p>修改以下文件内容 即可更改登入前的显示内容</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">/etc/issue    <br>/etc/issue.d/cockpit.issue    <span class="hljs-comment">#也可在/etc/issue.d/里任意添加文件后缀为.issue的文件（文件名和内容任意）</span><br></code></pre></td></tr></table></figure>
+
+<p>修改以下文件 即可更改登入后显示的内容</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">/etc/motd <br>/etc/motd.d/cokpit      <span class="hljs-comment">#也可在/etc/motd.d/里任意添加文件和任意内容</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="1-5-Info"><a href="#1-5-Info" class="headerlink" title="1.5 Info"></a>1.5 Info</h3><p>man常用于命令参考，GNU工具Info适合通用文档参考；没有参数，列出所有的页面</p>
+<p>Info页面的结构就像一个网站；每一页分为“节点”；链接节点之前*</p>
+<p><strong>Info命令格式</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">info [命令]<br></code></pre></td></tr></table></figure>
+
+<p>导航info页</p>
+<ul>
+<li>方向键，PgUp,PgDn导航</li>
+<li>Tab键移动到下一个链接</li>
+<li>d 显示主题目录</li>
+<li>Home 显示主题首部</li>
+<li>Enter 进入选定链接</li>
+<li>n/p/u/l进入下/前/上一层/最后一个链接</li>
+<li>s 文字 文本搜索</li>
+<li>q 退出info</li>
+</ul>
+<h3 id="1-6-Linux-安装提供的本地文档获取帮助"><a href="#1-6-Linux-安装提供的本地文档获取帮助" class="headerlink" title="1.6 Linux 安装提供的本地文档获取帮助"></a>1.6 Linux 安装提供的本地文档获取帮助</h3><p>Application-&gt;documentation-&gt;help (centos7)</p>
+<p>System-&gt;help (centos6)</p>
+<h3 id="1-7-命令自身提供的官方使用指南"><a href="#1-7-命令自身提供的官方使用指南" class="headerlink" title="1.7 命令自身提供的官方使用指南"></a>1.7 命令自身提供的官方使用指南</h3><p>/usr/share/doc 目录</p>
+<p>多数安装了的软件包的子目录，包括了这些软件的相关原理说明</p>
+<p>常见文档: README INSTALL CHANGES</p>
+<p>不适合其他地方的文档的位置</p>
+<p>配置文件范例</p>
+<p>HTML/PDF/PS 格式的文档</p>
+<p>授权书详情</p>
+<h3 id="1-8-系统及第三方应用官方文档"><a href="#1-8-系统及第三方应用官方文档" class="headerlink" title="1.8 系统及第三方应用官方文档"></a>1.8 系统及第三方应用官方文档</h3><h4 id="1-8-1-通过在线文档获取帮助"><a href="#1-8-1-通过在线文档获取帮助" class="headerlink" title="1.8.1 通过在线文档获取帮助"></a>1.8.1 通过在线文档获取帮助</h4><p><a target="_blank" rel="noopener" href="http://httpd.apache.org/">http://httpd.apache.org</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.nginx.org/">http://www.nginx.org</a></p>
+<p><a target="_blank" rel="noopener" href="https://mariadb.com/kb/en">https://mariadb.com/kb/en</a></p>
+<p><a target="_blank" rel="noopener" href="https://dev.mysql.com/docl">https://dev.mysql.com/docl</a></p>
+<p><a target="_blank" rel="noopener" href="http://tomcat.apache.orgl/">http://tomcat.apache.orgl</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.python.org/">http://www.python.org</a></p>
+<p><a target="_blank" rel="noopener" href="http://php.net/">http://php.net</a></p>
+<h4 id="1-8-2-红帽知识库和官方在线文档"><a href="#1-8-2-红帽知识库和官方在线文档" class="headerlink" title="1.8.2 红帽知识库和官方在线文档"></a>1.8.2 红帽知识库和官方在线文档</h4><p>通过发行版官方的文档光盘或网站可以获得安装指南、部署指南、虚拟化指南等</p>
+<p><a target="_blank" rel="noopener" href="http://kbase.redhat.com/">http://kbase.redhat.com</a></p>
+<p><a target="_blank" rel="noopener" href="http://www.redhat.com/docs">http://www.redhat.com/docs</a></p>
+<p><a target="_blank" rel="noopener" href="http://laccess.redhat.com/">http://laccess.redhat.com</a></p>
+<p><a target="_blank" rel="noopener" href="https://help.ubuntu.com/lts/serverguide/index.html">https://help.ubuntu.com/lts/serverguide/index.html</a></p>
+<span id="more"></span>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/yindong.github.io/categories/Linux/">Linux</a>
+                    
+                  </div>
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/yindong.github.io/2022/07/23/%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">文件管理</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/yindong.github.io/2022/07/10/Linux%E5%9F%BA%E7%A1%80/">
+                        <span class="hidden-mobile">Linux基础</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"knuxEHqBq6jIyCQJbdTG3FkD-gzGzoHsz","appKey":"cSdmOPjJK71fCLznx58yl98p","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/yindong.github.io/js/events.js" ></script>
+<script  src="/yindong.github.io/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/yindong.github.io/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/yindong.github.io/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+  <script defer src="/yindong.github.io/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/yindong.github.io/js/boot.js" ></script>
+
+
+</body>
+</html>

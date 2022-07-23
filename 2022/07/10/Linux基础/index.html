@@ -1,0 +1,998 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/yindong.github.io/img/favicon.png">
+  <link rel="icon" href="/yindong.github.io/img/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="1. Linux基础1.1 用户类型 root用户#: 一个特殊的管理账户；也被称为超级用户；root已接近完整的系统控制；对系统损害几乎有无线的能力；除非必要,不要登入root。 普通(非特权)用户$: 权限有限；造成损害的能力比较有限  返回值为0才是管理员账户 1234[10:46:14 root@centos8 ~]#id -u0[10:46:20 root@centos8 ~]#id -">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux基础">
+<meta property="og:url" content="https://lannister163.github.io/yindong.github.io/2022/07/10/Linux%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="阴东">
+<meta property="og:description" content="1. Linux基础1.1 用户类型 root用户#: 一个特殊的管理账户；也被称为超级用户；root已接近完整的系统控制；对系统损害几乎有无线的能力；除非必要,不要登入root。 普通(非特权)用户$: 权限有限；造成损害的能力比较有限  返回值为0才是管理员账户 1234[10:46:14 root@centos8 ~]#id -u0[10:46:20 root@centos8 ~]#id -">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-07-10T08:05:34.000Z">
+<meta property="article:modified_time" content="2022-07-23T03:39:03.349Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  <title>Linux基础 - 阴东</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4/github-markdown.min.css" />
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hint.css@2/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.css" />
+  
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_lbnruvf0jn.css">
+
+
+<link  rel="stylesheet" href="/yindong.github.io/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"lannister163.github.io","root":"/yindong.github.io/","version":"1.8.14","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":"knuxEHqBq6jIyCQJbdTG3FkD-gzGzoHsz","app_key":"cSdmOPjJK71fCLznx58yl98p","server_url":null,"path":"window.location.pathname","ignore_local":false}},"search_path":"/yindong.github.io/local-search.xml"};
+  </script>
+  <script  src="/yindong.github.io/js/utils.js" ></script>
+  <script  src="/yindong.github.io/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.2"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/yindong.github.io/">
+      <strong>Don&#39;t forget to smile</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/yindong.github.io/">
+                <i class="iconfont icon-home-fill"></i>
+                首页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/yindong.github.io/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/yindong.github.io/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                分类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/yindong.github.io/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/yindong.github.io/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              &nbsp;<i class="iconfont icon-search"></i>&nbsp;
+            </a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('/yindong.github.io/img/wenzhang.png') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Linux基础">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-07-10 08:05" pubdate>
+        2022年7月10日 早上
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      16k 字
+    </span>
+  
+
+  
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      137 分钟
+    </span>
+  
+
+  
+  
+    
+      <!-- LeanCloud 统计文章PV -->
+      <span id="leancloud-page-views-container" class="post-meta" style="display: none">
+        <i class="iconfont icon-eye" aria-hidden="true"></i>
+        <span id="leancloud-page-views"></span> 次
+      </span>
+    
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Linux基础</h1>
+            
+            <div class="markdown-body">
+              <h1 id="1-Linux基础"><a href="#1-Linux基础" class="headerlink" title="1. Linux基础"></a>1. Linux基础</h1><h2 id="1-1-用户类型"><a href="#1-1-用户类型" class="headerlink" title="1.1 用户类型"></a>1.1 用户类型</h2><ul>
+<li><strong>root用户#</strong>: 一个特殊的管理账户；也被称为超级用户；root已接近完整的系统控制；对系统损害几乎有无线的能力；除非必要,不要登入root。</li>
+<li><strong>普通(非特权)用户$</strong>: 权限有限；造成损害的能力比较有限</li>
+</ul>
+<p>返回值为0才是管理员账户</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><div class="code-wrapper"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></div></td><td class="code"><pre><code class="hljs bash">[10:46:14 root@centos8 ~]<span class="hljs-comment">#id -u</span><br>0<br>[10:46:20 root@centos8 ~]<span class="hljs-comment">#id -u yh</span><br>1000<br></code></pre></td></tr></table></figure>
+
+<h2 id="1-2-终端"><a href="#1-2-终端" class="headerlink" title="1.2 终端"></a>1.2 终端</h2><h3 id="1-2-1-查看当前终端设备-tty"><a href="#1-2-1-查看当前终端设备-tty" class="headerlink" title="1.2.1 查看当前终端设备:tty"></a>1.2.1 查看当前终端设备:tty</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">[05:04:24 root@centos8 ~]<span class="hljs-comment">#tty</span><br>/dev/pts/0<br></code></pre></td></tr></table></figure>
+
+<h3 id="1-2-2-查看内存：free-h"><a href="#1-2-2-查看内存：free-h" class="headerlink" title="1.2.2 查看内存：free -h"></a>1.2.2 查看内存：free -h</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash">[11:05:53 root@centos8 ~]<span class="hljs-comment">#free</span><br>              total        used        free      shared  buff/cache   available<br>Mem:        3799012     1027400     1865516       13792      906096     2513128<br>Swap:       2097148           0     2097148<br>[11:19:19 root@centos8 ~]<span class="hljs-comment">#free -h</span><br>              total        used        free      shared  buff/cache   available<br>Mem:          3.6Gi       1.0Gi       1.8Gi        13Mi       884Mi       2.4Gi<br>Swap:         2.0Gi          0B       2.0Gi<br>[11:27:18 root@centos8 ~]<span class="hljs-comment">#init 3    #临时关闭图形界面 切换的字符界面 内存使用减少</span><br>[11:27:23 root@centos8 ~]<span class="hljs-comment">#free -h</span><br>              total        used        free      shared  buff/cache   available<br>Mem:          3.6Gi       338Mi       2.4Gi       9.0Mi       878Mi       3.1Gi<br>Swap:         2.0Gi          0B       2.0Gi<br></code></pre></td></tr></table></figure>
+
+<h3 id="1-2-3-查看分区：lsblk"><a href="#1-2-3-查看分区：lsblk" class="headerlink" title="1.2.3 查看分区：lsblk"></a>1.2.3 查看分区：lsblk</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs bash">[11:19:24 root@centos8 ~]<span class="hljs-comment">#lsblk</span><br>NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT<br>sda      8:0    0  200G  0 disk <br>├─sda1   8:1    0    1G  0 part /boot<br>├─sda2   8:2    0  100G  0 part /<br>├─sda3   8:3    0   50G  0 part /data<br>├─sda4   8:4    0    1K  0 part <br>└─sda5   8:5    0    2G  0 part [SWAP]<br>sr0     11:0    1 53.5M  0 rom  /run/media/root/VMware Tools<br>sr1     11:1    1  9.3G  0 rom  /run/media/root/CentOS-8-4-2105-x86_64-dvd<br></code></pre></td></tr></table></figure>
+
+<h3 id="1-2-4-查看处理器：lscpu"><a href="#1-2-4-查看处理器：lscpu" class="headerlink" title="1.2.4 查看处理器：lscpu"></a>1.2.4 查看处理器：lscpu</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs bash">[11:20:29 root@centos8 ~]<span class="hljs-comment">#lscpu</span><br>架构：           x86_64<br>CPU 运行模式：   32-bit, 64-bit<br>字节序：         Little Endian<br>CPU:             4<br>在线 CPU 列表：  0-3<br>每个核的线程数： 1<br>每个座的核数：   1<br>座：             4<br>NUMA 节点：      1<br>厂商 ID：        GenuineIntel<br>BIOS Vendor ID:  GenuineIntel<br>CPU 系列：       6<br>型号：           158<br>型号名称：       Intel(R) Core(TM) i5-8300H CPU @ 2.30GHz<br>BIOS Model name: Intel(R) Core(TM) i5-8300H CPU @ 2.30GHz<br>步进：           10<br>CPU MHz：        2304.000<br>BogoMIPS：       4608.00<br>超管理器厂商：   VMware<br>虚拟化类型：     完全<br>L1d 缓存：       32K<br>L1i 缓存：       32K<br>L2 缓存：        256K<br>L3 缓存：        8192K<br>NUMA 节点0 CPU： 0-3<br></code></pre></td></tr></table></figure>
+
+<h3 id="1-2-5-查看系统版本：-cat-etc-os-release"><a href="#1-2-5-查看系统版本：-cat-etc-os-release" class="headerlink" title="1.2.5 查看系统版本： cat /etc/os-release"></a>1.2.5 查看系统版本： cat /etc/os-release</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash">[11:27:25 root@centos8 ~]<span class="hljs-comment">#cat /etc/os-release      注释:cat /etc/redhat-release “CentOS通用”</span><br>NAME=<span class="hljs-string">&quot;CentOS Linux&quot;</span><br>VERSION=<span class="hljs-string">&quot;8&quot;</span><br>ID=<span class="hljs-string">&quot;centos&quot;</span><br>ID_LIKE=<span class="hljs-string">&quot;rhel fedora&quot;</span><br>VERSION_ID=<span class="hljs-string">&quot;8&quot;</span><br>PLATFORM_ID=<span class="hljs-string">&quot;platform:el8&quot;</span><br>PRETTY_NAME=<span class="hljs-string">&quot;CentOS Linux 8&quot;</span><br>ANSI_COLOR=<span class="hljs-string">&quot;0;31&quot;</span><br>CPE_NAME=<span class="hljs-string">&quot;cpe:/o:centos:centos:8&quot;</span><br>HOME_URL=<span class="hljs-string">&quot;https://centos.org/&quot;</span><br>BUG_REPORT_URL=<span class="hljs-string">&quot;https://bugs.centos.org/&quot;</span><br>CENTOS_MANTISBT_PROJECT=<span class="hljs-string">&quot;CentOS-8&quot;</span><br>CENTOS_MANTISBT_PROJECT_VERSION=<span class="hljs-string">&quot;8&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="1-2-6-查看系统版本：-cat-etc-os-release"><a href="#1-2-6-查看系统版本：-cat-etc-os-release" class="headerlink" title="1.2.6 查看系统版本： cat /etc/os-release"></a>1.2.6 查看系统版本： cat /etc/os-release</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash">[11:27:25 root@centos8 ~]<span class="hljs-comment">#cat /etc/os-release      注释:cat /etc/redhat-release “CentOS通用”</span><br>NAME=<span class="hljs-string">&quot;CentOS Linux&quot;</span><br>VERSION=<span class="hljs-string">&quot;8&quot;</span><br>ID=<span class="hljs-string">&quot;centos&quot;</span><br>ID_LIKE=<span class="hljs-string">&quot;rhel fedora&quot;</span><br>VERSION_ID=<span class="hljs-string">&quot;8&quot;</span><br>PLATFORM_ID=<span class="hljs-string">&quot;platform:el8&quot;</span><br>PRETTY_NAME=<span class="hljs-string">&quot;CentOS Linux 8&quot;</span><br>ANSI_COLOR=<span class="hljs-string">&quot;0;31&quot;</span><br>CPE_NAME=<span class="hljs-string">&quot;cpe:/o:centos:centos:8&quot;</span><br>HOME_URL=<span class="hljs-string">&quot;https://centos.org/&quot;</span><br>BUG_REPORT_URL=<span class="hljs-string">&quot;https://bugs.centos.org/&quot;</span><br>CENTOS_MANTISBT_PROJECT=<span class="hljs-string">&quot;CentOS-8&quot;</span><br>CENTOS_MANTISBT_PROJECT_VERSION=<span class="hljs-string">&quot;8&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="1-3-设置主机名-hostnamectl"><a href="#1-3-设置主机名-hostnamectl" class="headerlink" title="1.3 设置主机名 hostnamectl"></a>1.3 设置主机名 hostnamectl</h2><p>hostnamectl命令来自于英文词组“hostname control”的缩写，其功能是用于显示与设置主机名称。基于/etc/hostname文件修改主机名称需要重启服务器后才可生效，而hostnamectl命令设置过的主机名称可以立即生效，效率更高。</p>
+<p><strong>语法格式:</strong> hostnamectl [参数]</p>
+<p><strong>常用参数:</strong></p>
+<table>
+<thead>
+<tr>
+<th>-H</th>
+<th>操作远程主机</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>status</td>
+<td>显示当前主机名设置</td>
+</tr>
+<tr>
+<td>set-hostname</td>
+<td>设置系统主机名</td>
+</tr>
+</tbody></table>
+<p>🌰  参考实例</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs bash">[11:29:22 root@centos8 ~]<span class="hljs-comment">#hostnamectl set-hostname test</span><br>[11:29:22 root@centos8 ~]<span class="hljs-comment">#exit</span><br><span class="hljs-comment">#重新ssh 发现主机名以变化为test</span><br>[11:30:02 root@<span class="hljs-built_in">test</span> ~]<span class="hljs-comment">#</span><br>[11:49:40 root@<span class="hljs-built_in">test</span> ~]<span class="hljs-comment">#hostname            #查看主机名</span><br><span class="hljs-built_in">test</span><br>[11:51:31 root@<span class="hljs-built_in">test</span> ~]<span class="hljs-comment">#hostname test2       #修改主机名为test2    注意:主机名不要使用下划线</span><br>[11:52:05 root@<span class="hljs-built_in">test</span> ~]<span class="hljs-comment">#hostname</span><br>test2<br>[11:29:22 root@<span class="hljs-built_in">test</span> ~]<span class="hljs-comment">#exit</span><br><span class="hljs-comment">#重新ssh 发现主机名以变化为test2, 查看主机名设备 test为静态主机名, test2为瞬息主机名</span><br>[11:35:44 root@test2 ~]<span class="hljs-comment">#hostnamectl status</span><br>   Static hostname: <span class="hljs-built_in">test</span><br>Transient hostname: test2<br>         Icon name: computer-vm<br>           Chassis: vm<br>        Machine ID: 20211228224205430949869876103821<br>           Boot ID: 5a08e2d75ba543baa3fda009f1c22113<br>    Virtualization: kvm<br>  Operating System: CentOS Linux 8<br>       CPE OS Name: cpe:/o:centos:centos:8<br>            Kernel: Linux 4.18.0-348.2.1.el8_5.x86_64<br>      Architecture: x86-64<br><span class="hljs-comment">#重启设备后 主机名恢复为静态主机名test</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="1-4-命令提示符"><a href="#1-4-命令提示符" class="headerlink" title="1.4 命令提示符"></a>1.4 命令提示符</h2><p><strong>命令提示符：prompt</strong></p>
+<p><strong>显示提示符格式</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">[11:54:30 root@centos8 ~]<span class="hljs-comment">#echo $PS1</span><br>\[\e[1;32m\][\[\e[0m\]\T \[\e[1;33m\]\u\[\e[36m\]@\h\[\e[1;31m\] \W\[\e[1;32m\]]\[\e[0m\]\$<br></code></pre></td></tr></table></figure>
+
+<p><strong>修改提示符格式</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">[11:54:35 root@centos8 ~]<span class="hljs-comment">#PS1=“\[\e[1;32m\][\[\e[0m\]\T \[\e[1;33m\]\u\[\e[36m\]@\h\[\e[1;31m\] \W\[\e[1;32m\]]\[\e[0m\]\$”                                 #写入内存注销后失效</span><br>[12:11:28 root@centos8 ~]<span class="hljs-comment">#echo &#x27;PS1=&quot;\[\e[1;32m\][\[\e[0m\]\T \[\e[1;33m\]\u\[\e[36m\]@\h\[\e[1;31m\] \W\[\e[1;32m\]]\[\e[0m\]\\$&quot;&#x27; &gt;  /etc/profile.d/***.sh      #写入文件永久保存</span><br></code></pre></td></tr></table></figure>
+
+<p>提示符格式说明:</p>
+<ul>
+<li>\e  控制符\033</li>
+<li>\u  当前用户</li>
+<li>\h  主机名简称</li>
+<li>\H  主机名</li>
+<li>\w  当前工作目录</li>
+<li>\W  当前工作目录基名</li>
+<li>\t   24小时时间格式</li>
+<li>\T  12小时时间格式</li>
+<li>！命令历史数</li>
+<li>#开机后命令历史数</li>
+</ul>
+<h2 id="1-5-执行命令"><a href="#1-5-执行命令" class="headerlink" title="1.5 执行命令"></a>1.5 执行命令</h2><h3 id="1-5-执行命令过程"><a href="#1-5-执行命令过程" class="headerlink" title="1.5. 执行命令过程"></a>1.5. 执行命令过程</h3><p>输入命令后回车，提请shell程序找到键入命令所对应的可执行程序或代码，并由其分析后提交给内核分配资源将其运行起来。</p>
+<h3 id="1-5-2-shell中可执行的两类命令"><a href="#1-5-2-shell中可执行的两类命令" class="headerlink" title="1.5.2 shell中可执行的两类命令"></a>1.5.2 shell中可执行的两类命令</h3><ul>
+<li>内部命令: 由shell自带的，而且通过某命令形式提供</li>
+<li>外部命令: 在文件系统路径下有对应的可执行程序文件</li>
+</ul>
+<p><strong>区别指定的命令是内部或外部命令</strong></p>
+<figure class="highlight elm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs elm"><span class="hljs-keyword">type</span> <span class="hljs-type">COMMAND</span><br></code></pre></td></tr></table></figure>
+
+<p>范例:查看是否存在对应内部和外部命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash">[01:13:52 root@centos8 ~]<span class="hljs-comment">#type echo</span><br><span class="hljs-built_in">echo</span> 是 shell 内建<br>[01:14:33 root@centos8 ~]<span class="hljs-comment">#which echo              </span><br>/usr/bin/echo<br>[01:15:38 root@centos8 ~]<span class="hljs-comment">#type -a echo</span><br><span class="hljs-built_in">echo</span> 是 shell 内建<br><span class="hljs-built_in">echo</span> 是 /usr/bin/echo<br></code></pre></td></tr></table></figure>
+
+<h4 id="1-5-2-1-内部命令相关"><a href="#1-5-2-1-内部命令相关" class="headerlink" title="1.5.2.1 内部命令相关"></a>1.5.2.1 内部命令相关</h4><p>help 内部命令列表</p>
+<p>enable 管理内部命令</p>
+<ul>
+<li>enable cmd 启用内部命令</li>
+<li>enable -n cmd 禁用内部命令</li>
+<li>enable -n 查看所有禁用的内部命令</li>
+</ul>
+<h4 id="1-5-2-2-执行外部命令"><a href="#1-5-2-2-执行外部命令" class="headerlink" title="1.5.2.2 执行外部命令"></a>1.5.2.2 执行外部命令</h4><p>查看外部命令路径:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">where</span> COMMAND<br>[01:36:28 root@centos8 ~]<span class="hljs-comment">#whereis ip</span><br>ip: /usr/sbin/ip /usr/share/man/man7/ip.7.gz /usr/share/man/man8/ip.8.gz<br>[01:36:32 root@centos8 ~]<span class="hljs-comment">#whereis echo</span><br><span class="hljs-built_in">echo</span>: /usr/bin/echo /usr/share/man/man1/echo.1.gz /usr/share/man/man1p/echo.1p.gz<br></code></pre></td></tr></table></figure>
+
+<p><strong>Hash缓存表</strong></p>
+<p>系统初始化hash表为空，当外部命令执行时，默认会从PATH路径下寻找该命令，找到后会将这条命令的路径记录到hash表中，当再次使用到该命令时，shell解释器首先会查看hash表，存在将执行之，如果不存在，将会去PATH路径下寻找，利用hash缓存表可大大提高命令的调用速率。</p>
+<p>hash 命令常见用法</p>
+<ul>
+<li>hash          显示hash缓存</li>
+<li>hash -l       显示hash缓存，可作为输入使用</li>
+<li>hash -p path name   将命令全路径path起别名为name</li>
+<li>hash -t name       打印缓存中name的路径</li>
+<li>hash -d name      清楚name缓存</li>
+<li>hash -r                  清楚缓存</li>
+</ul>
+<h3 id="1-5-3-命令别名"><a href="#1-5-3-命令别名" class="headerlink" title="1.5.3 命令别名"></a>1.5.3 命令别名</h3><p>对于经常执行的较长的命令,可以将其定义成较短的别名,以方便执行</p>
+<p>显示当前shell进程所有可用的命令别名</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs bash">[01:37:05 root@centos8 ~]<span class="hljs-comment">#alias</span><br><span class="hljs-built_in">alias</span> <span class="hljs-built_in">cp</span>=<span class="hljs-string">&#x27;cp -i&#x27;</span><br><span class="hljs-built_in">alias</span> egrep=<span class="hljs-string">&#x27;egrep --color=auto&#x27;</span><br><span class="hljs-built_in">alias</span> fgrep=<span class="hljs-string">&#x27;fgrep --color=auto&#x27;</span><br><span class="hljs-built_in">alias</span> grep=<span class="hljs-string">&#x27;grep --color=auto&#x27;</span><br><span class="hljs-built_in">alias</span> l.=<span class="hljs-string">&#x27;ls -d .* --color=auto&#x27;</span><br><span class="hljs-built_in">alias</span> ll=<span class="hljs-string">&#x27;ls -l --color=auto&#x27;</span><br><span class="hljs-built_in">alias</span> <span class="hljs-built_in">ls</span>=<span class="hljs-string">&#x27;ls --color=auto&#x27;</span><br><span class="hljs-built_in">alias</span> <span class="hljs-built_in">mv</span>=<span class="hljs-string">&#x27;mv -i&#x27;</span><br><span class="hljs-built_in">alias</span> <span class="hljs-built_in">rm</span>=<span class="hljs-string">&#x27;rm -i&#x27;</span><br><span class="hljs-built_in">alias</span> <span class="hljs-built_in">which</span>=<span class="hljs-string">&#x27;(alias; declare -f) | /usr/bin/which --tty-only --read-alias --read-functions --show-tilde --show-dot&#x27;</span><br><span class="hljs-built_in">alias</span> xzegrep=<span class="hljs-string">&#x27;xzegrep --color=auto&#x27;</span><br><span class="hljs-built_in">alias</span> xzfgrep=<span class="hljs-string">&#x27;xzfgrep --color=auto&#x27;</span><br><span class="hljs-built_in">alias</span> xzgrep=<span class="hljs-string">&#x27;xzgrep --color=auto&#x27;</span><br><span class="hljs-built_in">alias</span> zegrep=<span class="hljs-string">&#x27;zegrep --color=auto&#x27;</span><br><span class="hljs-built_in">alias</span> zfgrep=<span class="hljs-string">&#x27;zfgrep --color=auto&#x27;</span><br><span class="hljs-built_in">alias</span> zgrep=<span class="hljs-string">&#x27;zgrep --color=auto&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p>定义别名NAME,其相当于执行命令VALUE</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">alias</span> NAME=<span class="hljs-string">&#x27;VALUE&#x27;</span><br><span class="hljs-built_in">alias</span> free=<span class="hljs-string">&#x27;free -h&#x27;</span><br>[10:20:11 root@centos8 ~]<span class="hljs-comment">#alias free</span><br><span class="hljs-built_in">alias</span> free=<span class="hljs-string">&#x27;free -h&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p> 撤销别名: unalias</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">unalias</span> [-a] name [name...]<br><span class="hljs-built_in">unalias</span> -a <span class="hljs-comment">#取消所有别名</span><br></code></pre></td></tr></table></figure>
+
+<p>如果别名同原命令同名,如果要执行原命令,可使用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">\ALIASNAME<br><span class="hljs-string">&quot;ALIASNAME&quot;</span><br><span class="hljs-string">&#x27;ALIASNAME&#x27;</span><br><span class="hljs-built_in">command</span> ALIASNAME<br>/path/command<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash">[10:00:36 root@centos8 ~]<span class="hljs-comment">#free</span><br>              total        used        free      shared  buff/cache   available<br>Mem:          3.6Gi       406Mi       2.4Gi       9.0Mi       846Mi       3.0Gi<br>Swap:         2.0Gi          0B       2.0Gi<br>[10:02:29 root@centos8 ~]<span class="hljs-comment">#\free</span><br>              total        used        free      shared  buff/cache   available<br>Mem:        3799020      416456     2515984        9572      866580     3141772<br>Swap:       2097148           0     2097148<br></code></pre></td></tr></table></figure>
+
+<p>注意:在命令行中定义的别名,仅对当前shell进程有效</p>
+<p>如果想永久有效,要定义到配置文件中</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">[09:57:23 root@centos8 ~]<span class="hljs-comment">#echo &quot;alias free=&#x27;free -h&#x27;&quot; &gt;&gt; .bashrc</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>仅对当前用户: ~/.bashr</li>
+<li>对所有用户有效: /etc/bashrc</li>
+</ul>
+<p>编辑配置给出的新配置不会立即生效,bash进程重新读取配置文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">source</span> /path/to/config_file<br>. /path/to/config_file<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs bash">[10:24:43 root@centos8 ~]<span class="hljs-comment">#echo &#x27;alias osversion=&quot;cat /etc/os-release&quot;&#x27; &gt;&gt; .bashrc</span><br>[10:28:50 root@centos8 ~]<span class="hljs-comment">#osversion</span><br>bash: osversion: 未找到命令...<br>[10:29:36 root@centos8 ~]<span class="hljs-comment">#. .bashrc</span><br>[10:30:02 root@centos8 ~]<span class="hljs-comment">#osversion</span><br>NAME=<span class="hljs-string">&quot;CentOS Linux&quot;</span><br>VERSION=<span class="hljs-string">&quot;8&quot;</span><br>ID=<span class="hljs-string">&quot;centos&quot;</span><br>ID_LIKE=<span class="hljs-string">&quot;rhel fedora&quot;</span><br>VERSION_ID=<span class="hljs-string">&quot;8&quot;</span><br>PLATFORM_ID=<span class="hljs-string">&quot;platform:el8&quot;</span><br>PRETTY_NAME=<span class="hljs-string">&quot;CentOS Linux 8&quot;</span><br>ANSI_COLOR=<span class="hljs-string">&quot;0;31&quot;</span><br>CPE_NAME=<span class="hljs-string">&quot;cpe:/o:centos:centos:8&quot;</span><br>HOME_URL=<span class="hljs-string">&quot;https://centos.org/&quot;</span><br>BUG_REPORT_URL=<span class="hljs-string">&quot;https://bugs.centos.org/&quot;</span><br>CENTOS_MANTISBT_PROJECT=<span class="hljs-string">&quot;CentOS-8&quot;</span><br>CENTOS_MANTISBT_PROJECT_VERSION=<span class="hljs-string">&quot;8&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h3 id="1-5-4-命令格式"><a href="#1-5-4-命令格式" class="headerlink" title="1.5.4 命令格式"></a>1.5.4 命令格式</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">COMMAND [OPTIONS...] [ARGUMENTS...]<br></code></pre></td></tr></table></figure>
+
+<p>选项: 用于启用或关闭命令的某个或某些功能</p>
+<ul>
+<li>短选项: UNIX 风格选项, -c 例如: -l, -h</li>
+<li>长选项: GUN  风格选项, –word 例如: –all, –human</li>
+<li>BSD风格选项: 一个字母， 例如: a</li>
+</ul>
+<p>参数: 命令的作用对象,比如文件名，用户名等</p>
+<p>注意:</p>
+<ul>
+<li>多个选项以及参数和命令之间使用空白字符分隔</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">[11:09:27 root@centos8 ~]<span class="hljs-comment">#ls</span><br>公共  模板  视频  图片  文档  下载  音乐  桌面  anaconda-ks.cfg  initial-setup-ks.cfg<br>[11:09:38 root@centos8 ~]<span class="hljs-comment">#rm -rf 桌面</span><br>[11:09:44 root@centos8 ~]<span class="hljs-comment">#ls</span><br>公共  模板  视频  图片  文档  下载  音乐  anaconda-ks.cfg  initial-setup-ks.cfg<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>取消和结束命令执行: Ctrl+c, Ctrl+d</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs bash">[10:55:04 root@centos8 ~]<span class="hljs-comment">#bc</span><br>bc 1.07.1<br>Copyright 1991-1994, 1997, 1998, 2000, 2004, 2006, 2008, 2012-2017 Free Software Foundation, Inc.<br>This is free software with ABSOLUTELY NO WARRANTY.<br>For details <span class="hljs-built_in">type</span> `warranty<span class="hljs-string">&#x27;. </span><br><span class="hljs-string">2^3</span><br><span class="hljs-string">8</span><br><span class="hljs-string">obase=2                                     #用2进制输出</span><br><span class="hljs-string">255</span><br><span class="hljs-string">11111111</span><br><span class="hljs-string">256</span><br><span class="hljs-string">100000000                                  #可用Ctrl+c;Ctrl+d 退出</span><br><span class="hljs-string">[10:58:18 root@centos8 ~]#  </span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>多个命令可以用;符合分开</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">[11:03:26 root@centos8 ~]<span class="hljs-comment">#hostname;hostname -I;uname -r;echo $SHELL</span><br>centos8<br>192.168.72.130 192.168.122.1 <br>4.18.0-305.3.1.el8.x86_64<br>/bin/bash<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>一个命令可以用\分成多行</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">[11:11:46 root@centos8 ~]<span class="hljs-comment">#ho\</span><br>&gt; st\<br>&gt; name<br>centos8            <br></code></pre></td></tr></table></figure>
+
+<h3 id="1-6-常见命令"><a href="#1-6-常见命令" class="headerlink" title="1.6 常见命令"></a>1.6 常见命令</h3><h4 id="1-6-1-日期和时间"><a href="#1-6-1-日期和时间" class="headerlink" title="1.6.1 日期和时间"></a>1.6.1 日期和时间</h4><p>Linux的两种时钟</p>
+<p>   系统时钟: 由Linux内核通过CPU的工作频率进行的</p>
+<p>   硬件时钟: 主板</p>
+<p>相关命令</p>
+<ul>
+<li><p>date 显示和设置系统时间</p>
+<p>  范例：</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">date</span> +%s<br><span class="hljs-built_in">date</span> -d @1509536033<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><code class="hljs bash">[08:51:00 root@centos8 etc]<span class="hljs-comment">#date</span><br>2021年 11月 20日 星期六 20:51:16 CST<br>[08:51:16 root@centos8 etc]<span class="hljs-comment">#date +%F-%T</span><br>2021-11-20-20:51:26<br>[08:51:41 root@centos8 etc]<span class="hljs-comment">#date -d &#x27;-1 day&#x27; +%F-%T   #显示一天前的时间</span><br>2021-11-19-20:51:46<br><span class="hljs-comment">#创建一个以昨天时间为名称的文件</span><br>[08:55:47 root@centos8 data]<span class="hljs-comment">#touch `date -d &quot;-1 day&quot; +%F-%T`.log</span><br>[08:56:01 root@centos8 data]<span class="hljs-comment">#ls</span><br>2021-11-19-20:56:01.<span class="hljs-built_in">log</span><br><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>clock，hwclock: 显示硬件时钟</p>
+<p>  -s, –hctosys 以硬件时钟为准，校正系统时钟</p>
+<p>  -w,–systohc 以系统时钟为准, 校正硬件时钟</p>
+</li>
+</ul>
+<p>时区:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">/etc/localtime<br></code></pre></td></tr></table></figure>
+
+<p>范例:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">[09:50:56 root@centos8 ~]<span class="hljs-comment">#ll /etc/localtime</span><br>lrwxrwxrwx. 1 root root 35 8月  23 13:47 /etc/localtime -&gt; ../usr/share/zoneinfo/Asia/Shanghai<br></code></pre></td></tr></table></figure>
+
+<p>显示日历:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">cal -y<br></code></pre></td></tr></table></figure>
+
+<p>范例:</p>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs tap">[09:51:17 root@centos8 ~]<span class="hljs-comment">#cal 9 1752</span><br>      九月<span class="hljs-number"> 1752 </span>  <br>日 一 二 三 四 五 六<br>      <span class="hljs-number"> 1 </span><span class="hljs-number"> 2 </span>14<span class="hljs-number"> 15 </span>16<br>17<span class="hljs-number"> 18 </span>19<span class="hljs-number"> 20 </span>21<span class="hljs-number"> 22 </span>23<br>24<span class="hljs-number"> 25 </span>26<span class="hljs-number"> 27 </span>28<span class="hljs-number"> 29 </span>30<br>                  <br></code></pre></td></tr></table></figure>
+
+<h4 id="1-6-2-关机和重启"><a href="#1-6-2-关机和重启" class="headerlink" title="1.6.2 关机和重启"></a>1.6.2 关机和重启</h4><p>关机:</p>
+<ul>
+<li>halt</li>
+<li>poweroff</li>
+</ul>
+<p>重启:</p>
+<ul>
+<li>reboot</li>
+</ul>
+<p>-f, 强制，不调用shutdown</p>
+<p>-p, 切断电源</p>
+<p>关机或重启: shutdown</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">shutdown [OPTION]... [TIME] [MESSAGE]<br></code></pre></td></tr></table></figure>
+
+<p>-r: reboot</p>
+<p>-h: halt</p>
+<p>-c: cancel</p>
+<p>TIME: 无指定，默认相当于+1 （CentOS7）</p>
+<p> now：立刻，相当于+0</p>
+<div class="code-wrapper"><pre><code class="hljs">+#：相对时间表示法，几分钟之后；例如+3
+</code></pre></div>
+<p>hh:mm：绝对时间表示，指定具体时间</p>
+<h4 id="1-6-3-用户登入信息查看命令"><a href="#1-6-3-用户登入信息查看命令" class="headerlink" title="1.6.3 用户登入信息查看命令"></a>1.6.3 用户登入信息查看命令</h4><ul>
+<li>whoami：显示当前登入有效用户</li>
+<li>who：系统当前所有的登入会话</li>
+<li>w：系统当前所有的登入会话及所做的操作</li>
+</ul>
+<h4 id="1-6-4-文本编辑"><a href="#1-6-4-文本编辑" class="headerlink" title="1.6.4 文本编辑"></a>1.6.4 文本编辑</h4><p>nano；vim</p>
+<h4 id="1-6-5-会话管理"><a href="#1-6-5-会话管理" class="headerlink" title="1.6.5 会话管理"></a>1.6.5 会话管理</h4><h5 id="1-6-5-1-screen"><a href="#1-6-5-1-screen" class="headerlink" title="1.6.5.1 screen"></a>1.6.5.1 screen</h5><p>screen命令:</p>
+<ul>
+<li><p>创建screen会话</p>
+<p>  screen -S [SESSION]</p>
+</li>
+<li><p>加入screen会话</p>
+<p>  screen -x [SESSION]</p>
+</li>
+<li><p>退出并关闭screen会话</p>
+<p>  screen+a,d</p>
+</li>
+<li><p>显示所有已经打开的screen会话</p>
+<p>  screen -ls</p>
+</li>
+<li><p>恢复某screen会话</p>
+<p>  screen -r [SESSION]</p>
+</li>
+</ul>
+<h5 id="1-6-5-2-tmux"><a href="#1-6-5-2-tmux" class="headerlink" title="1.6.5.2 tmux"></a>1.6.5.2 tmux</h5><h6 id="1-6-5-2-1-会话与进程"><a href="#1-6-5-2-1-会话与进程" class="headerlink" title="1.6.5.2.1 会话与进程"></a>1.6.5.2.1 会话与进程</h6><p>命令行的典型使用方式是，打开一个终端窗口（terminal window，以下简称”窗口”），在里面输入命令。用户与计算机的这种临时的交互，称为一次”会话”（session） 。</p>
+<p>会话的一个重要特点是，窗口与其中启动的进程是连在一起的。打开窗口，会话开始；关闭窗口，会话结束，会话内部的进程也会随之终止，不管有没有运行完。</p>
+<p>一个典型的例子就是，SSH 登录远程计算机，打开一个远程窗口执行命令。这时，网络突然断线，再次登录的时候，是找不回上一次执行的命令的。因为上一次 SSH 会话已经终止了，里面的进程也随之消失了。</p>
+<p>为了解决这个问题，会话与窗口可以”解绑”：窗口关闭时，会话并不终止，而是继续运行，等到以后需要的时候，再让会话”绑定”其他窗口。</p>
+<h6 id="1-6-5-2-2-tmux的作用"><a href="#1-6-5-2-2-tmux的作用" class="headerlink" title="1.6.5.2.2 tmux的作用"></a>1.6.5.2.2 tmux的作用</h6><p>Tmux 就是会话与窗口的”解绑”工具，将它们彻底分离。</p>
+<ul>
+<li>它允许在单个窗口中，同时访问多个会话。这对于同时运行多个命令行程序很有用。</li>
+<li>它可以让新窗口”接入”已经存在的会话。</li>
+<li>它允许每个会话有多个连接窗口，因此可以多人实时共享会话。</li>
+<li>它还支持窗口任意的垂直和水平拆分。</li>
+</ul>
+<p>类似的终端复用器还有 GNU Screen。Tmux 与它功能相似，但是更易用，也更强大</p>
+<h6 id="1-6-5-2-3-基本用法"><a href="#1-6-5-2-3-基本用法" class="headerlink" title="1.6.5.2.3 基本用法"></a>1.6.5.2.3 基本用法</h6><ul>
+<li>启动与退出</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">[01:48:01 root@centos8 ~]<span class="hljs-comment">#tmux</span><br>[01:48:01 root@centos8 ~]<span class="hljs-comment">#exit    #或按下ctrl+d</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>前缀键</li>
+</ul>
+<p>Tmux 窗口有大量的快捷键。所有快捷键都要通过前缀键唤起。默认的前缀键是Ctrl+b，即先按下Ctrl+b，快捷键才会生效。</p>
+<p>举例来说，帮助命令的快捷键是Ctrl+b ?。它的用法是，在 Tmux 窗口中，先按下Ctrl+b，松开后再按下 ?，就会显示帮助信息。</p>
+<p>然后，按下 ESC 键或q键，就可以退出帮助。</p>
+<h6 id="1-6-5-2-4-会话管理"><a href="#1-6-5-2-4-会话管理" class="headerlink" title="1.6.5.2.4 会话管理"></a>1.6.5.2.4 会话管理</h6><ul>
+<li>新建会话</li>
+</ul>
+<p>第一个启动的 Tmux 窗口，编号是 <code>0</code>，第二个窗口的编号是 <code>1</code>，以此类推。这些窗口对应的会话，就是 0 号会话、1 号会话。</p>
+<p>使用编号区分会话，不太直观，更好的方法是为会话起名。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">[02:03:36 root@centos8 ~]<span class="hljs-comment">#tmux new -s &lt;session-name&gt;</span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>分离会话</li>
+</ul>
+<p>在 Tmux 窗口中，按下 <code>Ctrl+b d</code>或者输入 <code>tmux detach</code>命令，就会将当前会话与窗口分离。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">[02:10:34 root@centos8 ~]<span class="hljs-comment">#tmux detach</span><br></code></pre></td></tr></table></figure>
+
+<p>上面命令执行后，就会退出当前 Tmux 窗口，但是会话和里面的进程仍然在后台运行。</p>
+<p><code>tmux ls</code>命令可以查看当前所有的 Tmux 会话。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">[02:10:34 root@centos8 ~]<span class="hljs-comment">#tmux ls</span><br>0: 1 windows (created Tue Nov 16 14:03:36 2021) [186x27]<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>接入会话</li>
+</ul>
+<p><code>tmux attach</code>命令用于重新接入某个已存在的会话。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 使用会话编号</span><br>$ tmux attach -t 0<br><span class="hljs-comment"># 使用会话名称</span><br>$ tmux attach -t &lt;session-name<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>杀死会话</li>
+</ul>
+<p><code>tmux kill-session</code>命令用于杀死某个会话。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 使用会话编号</span><br>$ tmux kill-session -t 0<br><span class="hljs-comment"># 使用会话名称</span><br>$ tmux kill-session -t &lt;session-name&gt;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>切换会话</li>
+</ul>
+<p><code>tmux switch</code>命令用于切换会话。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 使用会话编号</span><br>$ tmux switch -t 0<br><span class="hljs-comment"># 使用会话名称</span><br>$ tmux switch -t &lt;session-name&gt;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>重命名会话</li>
+</ul>
+<p><code>tmux rename-session</code>命令用于重命名会话。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ tmux rename-session -t 0 &lt;new-name&gt;<br></code></pre></td></tr></table></figure>
+
+<p>上面命令将0号会话重命名。</p>
+<ul>
+<li>会话快捷键</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">Ctrl+b d：分离当前会话。<br>Ctrl+b s：列出所有会话。<br>Ctrl+b $：重命名当前会话<br></code></pre></td></tr></table></figure>
+
+<p>综上所述，以下是 Tmux 的最简操作流程。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">1.新建会话tmux new -s my_session。<br>2.在 Tmux 窗口运行所需的程序。<br>3.按下快捷键Ctrl+b d将会话分离。<br>4.下次使用时，重新连接到会话tmux attach-session -t my_session<br></code></pre></td></tr></table></figure>
+
+<h6 id="1-6-5-2-5-窗格操作"><a href="#1-6-5-2-5-窗格操作" class="headerlink" title="1.6.5.2.5 窗格操作"></a>1.6.5.2.5 窗格操作</h6><p>Tmux 可以将窗口分成多个窗格（pane），每个窗格运行不同的命令。以下命令都是在 Tmux 窗口中执行。</p>
+<ul>
+<li>划分窗格</li>
+</ul>
+<p><code>tmux split-window</code>命令用来划分窗格</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 划分上下两个窗格</span><br>$ tmux split-window<br><br><span class="hljs-comment"># 划分左右两个窗格</span><br>$ tmux split-window -h<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>移动光标</li>
+</ul>
+<p><code>tmux select-pane</code>命令用来移动光标位置。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 光标切换到上方窗格</span><br>$ tmux select-pane -U<br><span class="hljs-comment"># 光标切换到下方窗格</span><br>$ tmux select-pane -D<br><span class="hljs-comment"># 光标切换到左边窗格</span><br>$ tmux select-pane -L<br><span class="hljs-comment"># 光标切换到右边窗格</span><br>$ tmux select-pane -R<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>交换窗格位置</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 当前窗格上移</span><br>$ tmux swap-pane -U<br><span class="hljs-comment"># 当前窗格下移</span><br>$ tmux swap-pane -D<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>窗格快捷键</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><code class="hljs bash">Ctrl+b %：划分左右两个窗格。<br>Ctrl+b <span class="hljs-string">&quot;：划分上下两个窗格。</span><br><span class="hljs-string">Ctrl+b &lt;arrow key&gt;：光标切换到其他窗格。&lt;arrow key&gt;是指向要切换到的窗格的方向键，比如切换到下方窗格，就按方向键↓。</span><br><span class="hljs-string">Ctrl+b ;：光标切换到上一个窗格。</span><br><span class="hljs-string">Ctrl+b o：光标切换到下一个窗格。</span><br><span class="hljs-string">Ctrl+b &#123;：当前窗格与上一个窗格交换位置。</span><br><span class="hljs-string">Ctrl+b &#125;：当前窗格与下一个窗格交换位置。</span><br><span class="hljs-string">Ctrl+b Ctrl+o：所有窗格向前移动一个位置，第一个窗格变成最后一个窗格。</span><br><span class="hljs-string">Ctrl+b Alt+o：所有窗格向后移动一个位置，最后一个窗格变成第一个窗格。</span><br><span class="hljs-string">Ctrl+b x：关闭当前窗格。</span><br><span class="hljs-string">Ctrl+b !：将当前窗格拆分为一个独立窗口。</span><br><span class="hljs-string">Ctrl+b z：当前窗格全屏显示，再使用一次会变回原来大小。</span><br><span class="hljs-string">Ctrl+b Ctrl+&lt;arrow key&gt;：按箭头方向调整窗格大小。</span><br><span class="hljs-string">Ctrl+b q：显示窗格编号。</span><br></code></pre></td></tr></table></figure>
+
+<h6 id="1-6-5-2-6-窗口管理"><a href="#1-6-5-2-6-窗口管理" class="headerlink" title="1.6.5.2.6 窗口管理"></a>1.6.5.2.6 窗口管理</h6><p>除了将一个窗口划分成多个窗格，Tmux 也允许新建多个窗口。</p>
+<ul>
+<li>新建窗口</li>
+</ul>
+<p><code>tmux new-window</code>命令用来创建新窗口。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ tmux new-window<br><span class="hljs-comment"># 新建一个指定名称的窗口</span><br>$ tmux new-window -n &lt;window-name&gt;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>切换窗口</li>
+</ul>
+<p><code>tmux select-window</code>命令用来切换窗口。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 切换到指定编号的窗口</span><br>$ tmux select-window -t &lt;window-number&gt;<br><span class="hljs-comment"># 切换到指定名称的窗口</span><br>$ tmux select-window -t &lt;window-name&gt;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>重命名窗口</li>
+</ul>
+<p><code>tmux rename-window</code>命令用于为当前窗口起名（或重命名）</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$ tmux rename-window &lt;new-name&gt;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>窗口快捷键</li>
+</ul>
+<p>下面是一些窗口操作的快捷键。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">Ctrl+b c：创建一个新窗口，状态栏会显示多个窗口的信息。<br>Ctrl+b p：切换到上一个窗口（按照状态栏上的顺序）。<br>Ctrl+b n：切换到下一个窗口。<br>Ctrl+b &lt;number&gt;：切换到指定编号的窗口，其中的&lt;number&gt;是状态栏上的窗口编号。<br>Ctrl+b w：从列表中选择窗口。<br>Ctrl+b ,：窗口重命名<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>其它命令</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-comment"># 列出所有快捷键，及其对应的 Tmux 命令</span><br>$ tmux list-keys<br><span class="hljs-comment"># 列出所有 Tmux 命令及其参数</span><br>$ tmux list-commands<br><span class="hljs-comment"># 列出当前所有 Tmux 会话的信息</span><br>$ tmux info<br><span class="hljs-comment"># 重新加载当前的 Tmux 配置</span><br>$ tmux source-file ~/.tmux.conf<br></code></pre></td></tr></table></figure>
+
+<h4 id="1-6-6-输出信息-echo"><a href="#1-6-6-输出信息-echo" class="headerlink" title="1.6.6 输出信息 echo"></a>1.6.6 输出信息 echo</h4><p>echo命令可以将后面跟的字符进行输出</p>
+<p>功能: 显示字符,echo会将输入的字符串送往标准输出。输出的字符串间以空白字符隔开，并在最后加上换行号</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">echo</span> [-neE][字符串]<br></code></pre></td></tr></table></figure>
+
+<p>选项:</p>
+<ul>
+<li>-E (默认) 不支持\解释功能</li>
+<li>-n 不自动换行</li>
+<li>-e 启用\字符的解释功能</li>
+</ul>
+<p>显示变量</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bahs">echo &quot;$VAR_NAME&quot;    #变量会替换，弱引用<br>echo &#x27;$VAR_NAME&#x27;    #变量不会替换，强引用<br></code></pre></td></tr></table></figure>
+
+<p>启用命令选项-e，若字符串中出现以下字符，则特别加以处理，而不会将它当成一般文件输出</p>
+<ul>
+<li>\a发出警告声</li>
+<li>\b退格键</li>
+<li>\c最后不加上换行符号</li>
+<li>\e escape,相当于\033</li>
+<li>\n 换行且光标移至行首</li>
+<li>\r 回车,即光标移至行首,但不换行</li>
+<li>\t 插入tab</li>
+<li>\插入\字符</li>
+<li>\0nnn插入nnn(八进制) 所代表的ASCII字符</li>
+<li>\xHH插入HH(十六进制) 所代表的ASCII数字 （man 7 ascii）</li>
+</ul>
+<p>🌰</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">[01:38:11 root@centos8 ~]<span class="hljs-comment">#echo -e &#x27;\033[43;31;5myuhao\e[0m&#x27;</span><br></code></pre></td></tr></table></figure>
+
+<p><strong>echo的高级用法</strong></p>
+<p>在终端中，ANSI定义了用于屏幕显示的Escape屏幕控制码</p>
+<p>具有颜色的字符，其格式如下:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-string">&quot;\033[字符背景颜色;字体颜色m字符串\033[0m&quot;</span><br><br>\033[30m -- \033[37m 设置前景色 <br>\033[40m -- \033[47m 设置背景色<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight ldif"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs ldif"><span class="hljs-comment">#字符背景颜色范围: 40--47 40:黑</span><br><span class="hljs-attribute">41</span>:红<br><span class="hljs-attribute">42</span>:绿<br><span class="hljs-attribute">43</span>:黄 <br><span class="hljs-attribute">44</span>:蓝 <br><span class="hljs-attribute">45</span>:紫 <br><span class="hljs-attribute">46</span>:深绿 <br><span class="hljs-attribute">47</span>:白色<br><br><span class="hljs-comment">#字体颜色: 30--37 </span><br><span class="hljs-attribute">30</span>: 黑<br><span class="hljs-attribute">31</span>: 红<br><span class="hljs-attribute">32</span>: 绿<br><span class="hljs-attribute">33</span>: 黄 <br><span class="hljs-attribute">34</span>: 蓝 <br><span class="hljs-attribute">35</span>: 紫 <br><span class="hljs-attribute">36</span>: 深绿<br><span class="hljs-attribute">37</span>: 白色<br></code></pre></td></tr></table></figure>
+
+<p>加颜色只是以下控制码中的一种，下面是常见的一些ANSI控制码:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs bash">\033[0m 关闭所有属性 <br>\033[1m 设置高亮度 <br>\033[4m 下划线<br>\033[5m 闪烁<br>\033[7m 反显<br>\033[8m 消隐<br>\033[nA 光标上移n行 <br>\033[nB 光标下移n行 <br>\033[nC 光标右移n列 <br>\033[nD 光标左移n列 <br>\033[x;yH 设置光标位置x行y列 <br>\033[2J 清屏<br>\033[K 清除从光标到行尾的内容 <br>\033[s 保存光标位置<br>\033[u 恢复光标位置<br>\033[?25l 隐藏光标<br>\033[?25h 显示光标<br>\033[2J\033[0;0H 清屏且将光标置顶<br></code></pre></td></tr></table></figure>
+
+<h2 id="1-7-字符集和编码"><a href="#1-7-字符集和编码" class="headerlink" title="1.7 字符集和编码"></a>1.7 字符集和编码</h2><h4 id="1-7-1-ASCII码"><a href="#1-7-1-ASCII码" class="headerlink" title="1.7.1 ASCII码"></a>1.7.1 ASCII码</h4><p>计算机内部,所有信息最终都是一个二进制值。上个世纪60年代,美国制定了一套字符编码,对英语字符与二进制位之间的关系,做了统一规定,即ASCII（American Standard Code for Information Interchange）码。ASCII码一共规定了128个字符的编码,占用了一个字节的后面7位,最前面的一位统一规定为0</p>
+<h4 id="1-7-2-修改LANG变量实现中文语言提示"><a href="#1-7-2-修改LANG变量实现中文语言提示" class="headerlink" title="1.7.2 修改LANG变量实现中文语言提示"></a>1.7.2 修改LANG变量实现中文语言提示</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs bash">[root@centos7 ~]<span class="hljs-comment">#echo $LANG </span><br>en_US.UTF-8<br>[root@centos7 ~]<span class="hljs-comment">#xxx</span><br>bash: xxx: <span class="hljs-built_in">command</span> not found... <br>[root@centos7 ~]<span class="hljs-comment">#LANG=zh_CN.UTF-8 </span><br>[root@centos7 ~]<span class="hljs-comment">#echo $LANG </span><br>zh_CN.UTF-8<br>[root@centos7 ~]<span class="hljs-comment">#xxx</span><br>bash: xxx: 未找到命令...<br></code></pre></td></tr></table></figure>
+
+<h2 id="1-8-命令行扩展和被括起来的集合"><a href="#1-8-命令行扩展和被括起来的集合" class="headerlink" title="1.8 命令行扩展和被括起来的集合"></a>1.8 命令行扩展和被括起来的集合</h2><h4 id="1-8-1-命令行扩展"><a href="#1-8-1-命令行扩展" class="headerlink" title="1.8.1 命令行扩展: $ ()"></a>1.8.1 命令行扩展: $ ()</h4><p>把一个命令的输出打印给另一个命令的参数</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">$(CMD) 或 `CMD`<br></code></pre></td></tr></table></figure>
+
+<p>范例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">[04:39:17 root@centos8 ~]<span class="hljs-comment">#echo &quot;i am $(whoami)&quot;</span><br>i am root<br>[04:39:22 root@centos8 ~]<span class="hljs-comment">#echo &quot;This system&#x27;s name is $(hostname)&quot;</span><br>This system<span class="hljs-string">&#x27;s name is centos8</span><br></code></pre></td></tr></table></figure>
+
+<h4 id="1-8-2-括号扩展"><a href="#1-8-2-括号扩展" class="headerlink" title="1.8.2 括号扩展: {}"></a>1.8.2 括号扩展: {}</h4><p>{}可以实现打印重复字符串的简化形式</p>
+<p>范例:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">[04:52:24 root@centos8 ~]<span class="hljs-comment">#echo &#123;1..10&#125;</span><br>1 2 3 4 5 6 7 8 9 10<br>[04:54:40 root@centos8 ~]<span class="hljs-comment">#echo &#123;1..20..4&#125;</span><br>1 5 9 13 17<br>[04:52:00 root@centos8 ~]<span class="hljs-comment">#echo file&#123;1,3,5&#125;</span><br>file1 file3 file5<br></code></pre></td></tr></table></figure>
+
+<h2 id="1-9-tab键补全"><a href="#1-9-tab键补全" class="headerlink" title="1.9 tab键补全"></a>1.9 tab键补全</h2><p>tab键可以实现命令及路径等不全，提供输入效率，避免出错。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash">最小安装tab很多命令不能自动补齐<br>dnf install bash-completion -y<br><span class="hljs-built_in">source</span> /etc/profile.d/bash_completion.sh<br></code></pre></td></tr></table></figure>
+
+<h4 id="1-9-1-命令补全"><a href="#1-9-1-命令补全" class="headerlink" title="1.9.1 命令补全"></a>1.9.1 命令补全</h4><ul>
+<li>内部命令:</li>
+<li>外部命令:bash根据PATH环境变量定义的路径，自左而右在每个路径搜寻以给定命令名命名的文件，第一次找到的命令即为要执行的命令。</li>
+</ul>
+<p>注意: 用户给定的字符串只有一条唯一对应的命令直接补全，否则再次tab会给出列表</p>
+<h4 id="1-9-2-路径补全"><a href="#1-9-2-路径补全" class="headerlink" title="1.9.2 路径补全"></a>1.9.2 路径补全</h4><p>把用户给出的字符串当做路径开头，并在其指定上级目录下搜索以指定的字符串开头的文件名，如果唯一：则直接补全否则再次tab给出列表。</p>
+<h3 id="1-9-3-双击tab键"><a href="#1-9-3-双击tab键" class="headerlink" title="1.9.3 双击tab键"></a>1.9.3 双击tab键</h3><ul>
+<li>command 2 tab 所有子命令或文件补全</li>
+<li>string 2 tab 以string开头命令</li>
+<li>/2tab 显示所有根目录下一级目录，包括隐藏目录</li>
+<li>./2tab 当前目录下子目录，包括隐藏目录</li>
+<li>*2tab 当前目录下子目录，不包括隐藏目录</li>
+<li>~2tab 所有用户列表</li>
+<li>$2tab 所有变量</li>
+<li>@2tab /etc/hosts记录 （ecntos7不支持）</li>
+<li>=2tab 相当于ls -A （centos7不支持）</li>
+</ul>
+<h2 id="1-10-命令行历史"><a href="#1-10-命令行历史" class="headerlink" title="1.10 命令行历史"></a>1.10 命令行历史</h2><p>保存你输入的命令历史。可以用它来重复执行命令，登入shell时，会读取命令历史文件中记录下的命令~/.bash_history 登入进shell后新执行的命令只会记录在缓存中；这些命令会再用户退出时“追加”到命令历史文件中。</p>
+<ul>
+<li>-c : 清空命令历史</li>
+<li>-d : 删除历史记录中指定的行</li>
+<li>n  : 显示最近的n条记录</li>
+<li>-a : 将历史命令缓冲区中命令写入历史命令文件中</li>
+<li>-r : 将历史命令文件中的命令读入当前历史命令缓冲区</li>
+<li>-w: 保存历史列表到指定的历史文件</li>
+<li>-n : 读历史文件中未读过的行到历史列表</li>
+<li>-p : 展开历史参数成多行，但不存在历史列表中</li>
+<li>-s : 展开历史参数成一行，附近在历史列表后</li>
+</ul>
+<p><strong>命令历史相关环境变量</strong></p>
+<ul>
+<li>HISTSIZE : 命令历史记录的条数</li>
+<li>HISTFILE : 指定历史文件，默认为~/.bash_history</li>
+<li>HISTTIMEFORMAT=”%F %T “ 显示时间</li>
+<li>HISTIGNORE=”str1:str2*;…”, 忽略str1命令，str2开头的历史</li>
+<li>HISTCONTROL : 控制命令历史的记录方式 ignoredups 是默认值，可忽略重复命令，连续且相同为”重复“ignorespace 忽略所有以空白开头的命令;ignoreboth相当于ignoredups，ignorespace的组合;erasedups删除重复命令。</li>
+</ul>
+<p><strong>持久保存变量</strong></p>
+<ul>
+<li>以上变量可以export变量名=”值”形式存放在/etc/profile 或 ~/.bash_profile</li>
+</ul>
+<p>范例：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs bash">[09:21:01 root@centos8 ~]<span class="hljs-comment">#cat .bash_profile </span><br><span class="hljs-comment"># .bash_profile</span><br><br><span class="hljs-comment"># Get the aliases and functions</span><br><span class="hljs-keyword">if</span> [ -f ~/.bashrc ]; <span class="hljs-keyword">then</span><br>	. ~/.bashrc<br><span class="hljs-keyword">fi</span><br><br><span class="hljs-comment"># User specific environment and startup programs</span><br><br>PATH=<span class="hljs-variable">$PATH</span>:<span class="hljs-variable">$HOME</span>/bin<br><br><span class="hljs-built_in">export</span> PATH<br><span class="hljs-built_in">export</span> HISTCONTROL=ignoreboth<br><span class="hljs-built_in">export</span> HISTSIZE=1500<br><span class="hljs-built_in">export</span> HISTTIMEFORMAT=<span class="hljs-string">&quot;%F %T&quot;</span><br></code></pre></td></tr></table></figure>
+
+<h2 id="1-11-bash快捷键"><a href="#1-11-bash快捷键" class="headerlink" title="1.11 bash快捷键"></a>1.11 bash快捷键</h2><p>Ctrl+l清屏，相当于clear命令</p>
+<p>Ctrl + o执行当前命令，并重新显示本命令</p>
+<p>ctrl+ s阻止屏幕输出，锁定</p>
+<p>Ctrl + q允许屏幕输出</p>
+<p>ctrl + c终止命令</p>
+<p>ctrl+z挂起命令</p>
+<p>Ctrl+ a光标移到命令行首，相当于Home</p>
+<p>Ctrl + e光标移到命令行尾，相当于End</p>
+<p>Ctrl +f光标向右移动一个字符</p>
+<p>Ctrl+ b光标向左移动一个字符</p>
+<p>Alt+ f光标向右移动一个单词尾</p>
+<p>Alt + b光标向左移动一个单词首</p>
+<p>Ctrl + xx光标在命令行首和光标之间移动</p>
+<p>Ctrl +u从光标处删除至命令行首</p>
+<p>Ctrl+k从光标处删除至命令行尾</p>
+<p>Alt + r删除当前整行</p>
+<p>Ctrl+ w从光标处向左删除至单词首</p>
+<p>Alt + d 从光标处向右删除至单词尾</p>
+<p>ctrl + d删除光标处的一个字符</p>
+<p>Ctrl+ h删除光标前的一个字符</p>
+<p>Ctrl +y 将删除的字符粘贴至光标后</p>
+<p>Alt +c从光标处开始向右更改为首字母大写的单词</p>
+<p>Alt + u从光标处开始，将右边一个单词更改为大写</p>
+<p>Alt+l从光标处开始，将右边一个单词更改为小写</p>
+<p>Ctrl + t交换光标处和之前的字符位置</p>
+<p>Alt + t交换光标处和之前的单词位置</p>
+<p>Alt+#提示输入指定字符后，重复显示该字符#次</p>
+<p>注意:Alt组合快捷键经常和其它软件冲突</p>
+<span id="more"></span>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/yindong.github.io/categories/Linux/">Linux</a>
+                    
+                  </div>
+                
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/yindong.github.io/2022/07/13/%E8%8E%B7%E5%8F%96%E5%B8%AE%E5%8A%A9/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">获取帮助</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/yindong.github.io/2022/05/12/%E5%85%8D%E8%B4%B9%E6%90%9E%E7%BD%91%E7%AB%99-gitpages/">
+                        <span class="hidden-mobile">免费搞网站-gitpages</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.loadComments('#valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1/dist/Valine.min.js', function() {
+        var options = Object.assign(
+          {"appId":"knuxEHqBq6jIyCQJbdTG3FkD-gzGzoHsz","appKey":"cSdmOPjJK71fCLznx58yl98p","path":"window.location.pathname","placeholder":null,"avatar":"retro","meta":["nick","mail","link"],"requiredFields":[],"pageSize":10,"lang":"zh-CN","highlight":false,"recordIP":false,"serverURLs":"","emojiCDN":null,"emojiMaps":null,"enableQQ":false},
+          {
+            el: "#valine",
+            path: window.location.pathname
+          }
+        )
+        new Valine(options);
+        Fluid.utils.waitElementVisible('#valine .vcontent', () => {
+          Fluid.plugins.initFancyBox('#valine .vcontent img:not(.vemoji)');
+        })
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the comments</noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;目录</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+  <div class="statistics">
+    
+    
+
+    
+      
+        <!-- LeanCloud 统计PV -->
+        <span id="leancloud-site-pv-container" style="display: none">
+            总访问量 
+            <span id="leancloud-site-pv"></span>
+             次
+          </span>
+      
+      
+        <!-- LeanCloud 统计UV -->
+        <span id="leancloud-site-uv-container" style="display: none">
+            总访客数 
+            <span id="leancloud-site-uv"></span>
+             人
+          </span>
+      
+
+    
+  </div>
+
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.min.js" ></script>
+<script  src="/yindong.github.io/js/events.js" ></script>
+<script  src="/yindong.github.io/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  <script  src="/yindong.github.io/js/local-search.js" ></script>
+
+
+
+  
+    <script  src="/yindong.github.io/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  
+    <script  src="https://cdn.jsdelivr.net/npm/tocbot@4/dist/tocbot.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3/dist/jquery.fancybox.min.js" ></script>
+  
+  
+    <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4/anchor.min.js" ></script>
+  
+  
+    <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2/dist/clipboard.min.js" ></script>
+  
+
+
+
+
+  <script defer src="/yindong.github.io/js/leancloud.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+        typing(title);
+      
+    })(window, document);
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/yindong.github.io/js/boot.js" ></script>
+
+
+</body>
+</html>
